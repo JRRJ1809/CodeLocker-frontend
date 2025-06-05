@@ -1,11 +1,13 @@
 import React from 'react';
 import './Footer.css';
 
-const Footer = () => {
+function Footer(){
   return (
-    <footer className="footer">
-      <p>&copy; 2025 SENAI - Todos os direitos reservados.</p>
-    </footer>
+    <>
+      <footer className="footer">
+        <p>&copy; 2025 SENAI - Todos os direitos reservados.</p>
+      </footer>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import CadastroAdm from '../pages/CadastroAdm/CadastroAdm';
 import Salas from '../pages/Salas/Salas';
 import QrCode from '../pages/QrCode/QrCode';
 import Registros from '../pages/Registros/Registros';
+import UserInicial from '../pages/UserInicial/UserInicial'; // 👈 importa a página pós login
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
         <Route path="/salas" element={<Salas />} />
         <Route path="/qrcode" element={<QrCode />} />
         <Route path="/registros" element={<Registros />} />
+        <Route path="/userinicial" element={<UserInicial />} /> {/* 👈 adiciona isso */}
       </Routes>
     </BrowserRouter>
   );
