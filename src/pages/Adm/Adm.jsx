@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // Importar useNavigate do React Router
 import logo from '../../assets/senai-logo.png';
 import './Adm.css';
 
@@ -10,14 +11,28 @@ const Adm = () => {
   const [tipo, setTipo] = useState('');
   const [erro, setErro] = useState('');
 
+  const navigate = useNavigate();  // Definir o hook de navegação
+
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${urlAdm}?login=${login}&senha=${senha}`);
+      // Modificado para fazer o filtro correto
+      const response = await fetch(`${urlAdm}?adm1=${login}&senha=${senha}`);
       const data = await response.json();
 
       if (data.length > 0) {
+        const usuario = data[0];  // Supondo que a resposta seja um array com um único item
+
+        setTipo(usuario.tipo);  // Definindo o tipo do usuário
         alert('Login bem-sucedido!');
-       
+
+        // Redirecionar o usuário para a próxima página após o login
+        if (usuario.tipo === '1') {
+          // Se for tipo 1, vai para a página de admin
+          navigate('/admin-dashboard');  // Aqui, coloque a rota para onde você quer redirecionar
+        } else {
+          // Para outros tipos de usuários, redireciona para outra página, se necessário
+          navigate('/user-dashboard');  // Exemplo de outra rota
+        }
       } else {
         setErro('Usuário ou senha inválidos');
       }
