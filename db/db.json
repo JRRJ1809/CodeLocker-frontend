@@ -5,6 +5,52 @@
       "adm1": "SIDRONIO",
       "senha": "teste1",
       "tipo": "1"
-    }]
+    },
+    {
+      "id": "c9df",
+      "adm1": "roblox",
+      "senha": "roblox",
+      "tipo": "4"
+    },
+    {
+      "id": "5df3",
+      "adm1": "JR",
+      "senha": "jr",
+      "tipo": "1"
+    },
+    {
+      "id": "7be3",
+      "adm1": "teste2",
+      "senha": "teste2",
+      "tipo": "2"
+    },
+    {
+      "id": "06df",
+      "adm1": "aiai",
+      "senha": "aiai",
+      "tipo": "5"
+    }
+  ],
+  "tipos": [
+    {
+      "id": 1,
+      "tipo": "Admin"
+    },
+    {
+      "id": 2,
+      "tipo": "Coordenador"
+    },
+    {
+      "id": 3,
+      "tipo": "Professor"
+    },
+    {
+      "id": 4,
+      "tipo": "Manutenção"
+    },
+    {
+      "id": 5,
+      "tipo": "Limpeza"
+    }
+  ]
 }
-  

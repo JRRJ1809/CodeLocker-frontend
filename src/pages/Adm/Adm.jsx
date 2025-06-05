@@ -27,11 +27,11 @@ const Adm = () => {
 
         // Redirecionar o usuário para a próxima página após o login
         if (usuario.tipo === '1') {
-          // Se for tipo 1, vai para a página de admin
-          navigate('/admin-dashboard');  // Aqui, coloque a rota para onde você quer redirecionar
+          // Se for tipo 1, vai para a página CadastroAdm
+          navigate('/CadastroAdm');  // Aqui, coloque a rota para onde você quer redirecionar
         } else {
-          // Para outros tipos de usuários, redireciona para outra página, se necessário
-          navigate('/user-dashboard');  // Exemplo de outra rota
+          // Para outros tipos de usuários, redireciona para a tela inicial (Login)
+          navigate('/');  // Redireciona para a tela de login, ou onde você quiser
         }
       } else {
         setErro('Usuário ou senha inválidos');

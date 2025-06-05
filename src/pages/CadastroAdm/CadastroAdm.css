@@ -34,14 +34,14 @@
   padding: 0.75rem;
   font-size: 1rem;
   color: white;
-  background-color: #0077b6;
+  background-color: #ce0505;
   border: none;
   border-radius: 0.375rem;
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: #005f8a;
+  background-color: #b40000;
 }
 
 .admin-list {

@@ -5,9 +5,13 @@
   align-items: center;
   padding: 10px 30px;
 }
+.image-logo{
+  text-align: center;
+}
 
-.header img {
-  height: 40px;
+.logoh{
+  height: 100px;
+  width: 400px;
 }
 
 .header nav a {
