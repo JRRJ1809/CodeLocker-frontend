@@ -1,0 +1,61 @@
+/* Barra Vermelha Superior */
+.red-header {
+  background-color: #d32f2f;
+  color: white;
+  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  padding: 5px 0;
+}
+
+.senai-logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+.red-header nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.red-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Conteúdo Principal */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.main-content h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Status Fixo */
+.status.aberta {
+  color: red;
+  font-weight: bold;
+  font-size: 1.2em;
+}
