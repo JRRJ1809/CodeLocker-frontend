@@ -5,12 +5,13 @@ function CadastroAdm() {
   const [admins, setAdmins] = useState([]);
   const [newAdminName, setNewAdminName] = useState('');
   const [newAdminPassword, setNewAdminPassword] = useState('');
+  const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [newAdminPhone, setNewAdminPhone] = useState('');
   const [newAdminType, setNewAdminType] = useState('');
-  const [tipos, setTipos] = useState([]); // Tipos de usuário vindos da API
+  const [tipos, setTipos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
 
-  // Carregar tipos da API
   useEffect(() => {
     const fetchTipos = async () => {
       try {
@@ -19,7 +20,7 @@ function CadastroAdm() {
         setTipos(data);
 
         if (data.length > 0) {
-          setNewAdminType(data[0].id.toString()); // Seleciona o primeiro tipo como padrão
+          setNewAdminType(data[0].id.toString());
         }
       } catch (error) {
         setErro('Erro ao carregar tipos de usuário');
@@ -30,10 +31,18 @@ function CadastroAdm() {
   }, []);
 
   const handleAddAdmin = async () => {
-    if (newAdminName.trim() && newAdminPassword.trim() && newAdminType) {
+    if (
+      newAdminName.trim() &&
+      newAdminPassword.trim() &&
+      newAdminEmail.trim() &&
+      newAdminPhone.trim() &&
+      newAdminType
+    ) {
       const newAdmin = {
         adm1: newAdminName,
         senha: newAdminPassword,
+        email: newAdminEmail,
+        telefone: newAdminPhone,
         tipo: newAdminType
       };
 
@@ -50,6 +59,8 @@ function CadastroAdm() {
           setAdmins([...admins, savedAdmin]);
           setNewAdminName('');
           setNewAdminPassword('');
+          setNewAdminEmail('');
+          setNewAdminPhone('');
           setErro('');
         } else {
           throw new Error('Erro ao salvar o administrador');
@@ -99,6 +110,26 @@ function CadastroAdm() {
 
       <div className="form">
         <input
+          type="email"
+          placeholder="Digite o e-mail do usuário"
+          className="input"
+          value={newAdminEmail}
+          onChange={(e) => setNewAdminEmail(e.target.value)}
+        />
+      </div>
+
+      <div className="form">
+        <input
+          type="tel"
+          placeholder="Digite o telefone do usuário"
+          className="input"
+          value={newAdminPhone}
+          onChange={(e) => setNewAdminPhone(e.target.value)}
+        />
+      </div>
+
+      <div className="form">
+        <input
           type="password"
           placeholder="Digite uma senha para o usuário"
           className="input"
@@ -133,7 +164,7 @@ function CadastroAdm() {
           const tipoNome = tipos.find(t => t.id.toString() === admin.tipo)?.tipo || 'Desconhecido';
           return (
             <li key={index} className="admin-item">
-              {admin.adm1} (Tipo: {tipoNome})
+              {admin.adm1} - {admin.email} - {admin.telefone} (Tipo: {tipoNome})
               <button className="delete-button" onClick={() => handleRemoveAdmin(index)}>
                 Excluir
               </button>

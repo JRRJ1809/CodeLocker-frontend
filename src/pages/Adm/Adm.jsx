@@ -28,7 +28,7 @@ const Adm = () => {
         // Redirecionar o usuário para a próxima página após o login
         if (usuario.tipo === '1') {
           // Se for tipo 1, vai para a página CadastroAdm
-          navigate('/CadastroAdm');  // Aqui, coloque a rota para onde você quer redirecionar
+          navigate('/AdmInicial');  // Aqui, coloque a rota para onde você quer redirecionar
         } else {
           // Para outros tipos de usuários, redireciona para a tela inicial (Login)
           navigate('/');  // Redireciona para a tela de login, ou onde você quiser
