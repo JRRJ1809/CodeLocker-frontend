@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import senaiLogo from '../../assets/senai-logo.png';
 import './CadastroAdm.css';
 
 function CadastroAdm() {
@@ -11,6 +13,8 @@ function CadastroAdm() {
   const [tipos, setTipos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTipos = async () => {
@@ -43,7 +47,7 @@ function CadastroAdm() {
         senha: newAdminPassword,
         email: newAdminEmail,
         telefone: newAdminPhone,
-        tipo: newAdminType
+        tipo: newAdminType,
       };
 
       try {
@@ -96,6 +100,20 @@ function CadastroAdm() {
 
   return (
     <div className="container">
+      {/* Navbar */}
+      <header className="red-header">
+        <div className="logo-container">
+          <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
+        </div>
+        <nav className="nav-buttons">
+          <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
+          <button onClick={() => navigate('/registros')}>REGISTROS</button>
+          <button onClick={() => navigate('/cadastroadm')}>CRIAR USUÁRIO</button>
+          <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/')}>TELA INICIAL</button>
+        </nav>
+      </header>
+
       <h1 className="title">Gerenciamento de Usuários</h1>
 
       <div className="form">
@@ -161,7 +179,7 @@ function CadastroAdm() {
 
       <ul className="admin-list">
         {admins.map((admin, index) => {
-          const tipoNome = tipos.find(t => t.id.toString() === admin.tipo)?.tipo || 'Desconhecido';
+          const tipoNome = tipos.find((t) => t.id.toString() === admin.tipo)?.tipo || 'Desconhecido';
           return (
             <li key={index} className="admin-item">
               {admin.adm1} - {admin.email} - {admin.telefone} (Tipo: {tipoNome})
