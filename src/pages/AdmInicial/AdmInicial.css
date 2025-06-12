@@ -1,6 +1,3 @@
-/* Herda todos os estilos da UserInicial e adiciona específicos */
-@import './UserInicial.css';
-
 .main-content {
   padding: 30px;
 }
