@@ -78,3 +78,15 @@ input {
   border-radius: 5px;
   box-sizing: border-box;
 }
+
+.adm-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px); /* Compensa Header + Footer */
+  padding: 60px 0; /* Espaçamento para Header e Footer */
+  background: #f9f9f9;
+  flex-direction: column;
+}
+
+/* Restante do seu CSS permanece igual */
