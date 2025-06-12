@@ -51,7 +51,7 @@ const UserInicial = () => {
           <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
           <button onClick={() => navigate('/userinicial')}>PERFIL</button>
         </nav>
-      </header>
+      </header> 
 
       {/* Conteúdo Central - Dados do usuário logado */}
       <main className="main-content">
