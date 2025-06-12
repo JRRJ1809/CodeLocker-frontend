@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import senaiLogo from '../../assets/senai-logo.png';
 import './AdmInicial.css';
+import Footer from '../../components/Footer/Footer.jsx';
 
 
 const AdmInicial = () => {
@@ -35,6 +36,7 @@ const AdmInicial = () => {
         </div>
       </main>
     </div>
+    <Footer />
     </>
   );
 };
