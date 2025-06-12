@@ -23,18 +23,16 @@ const Registros = () => {
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
         </div>
         <nav>
-          <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
+          <button onClick={() => navigate('/cadastro-adm')}>CADASTRO ADM</button>
           <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
           <button onClick={() => navigate('/registros')}>REGISTROS</button>
-          <button onClick={() => navigate('/cadastroadm')}>CRIAR USUARIO</button>        
-          <button onClick={() => navigate('/adm')}>TELA INICIAL</button>
         </nav>
       </header>
 
       {/* Conteúdo Principal */}
       <main className="main-content">
-       
-        <h1>REGISTROS</h1>
+        <h1>SENAI</h1>
+        <h2>REGISTROS</h2>
         
         <div className="registros-table">
           {registros.map((registro, index) => (
@@ -47,7 +45,9 @@ const Registros = () => {
           ))}
         </div>
 
-        
+        <div className="admin-label">
+          ADMINISTRADOR
+        </div>
       </main>
     </div>
   );
