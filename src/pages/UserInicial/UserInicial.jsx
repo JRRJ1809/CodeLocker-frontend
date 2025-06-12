@@ -8,7 +8,7 @@ const UserInicial = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Simulação: ID do usuário logado (substitua pela sua lógica real)
+  // ID do usuário logado (substitua pelo valor real da sua autenticação)
   const loggedUserId = "1"; // Exemplo: ID do SIDRONIO
 
   useEffect(() => {
@@ -28,45 +28,53 @@ const UserInicial = () => {
   }, [loggedUserId]);
 
   // Função para traduzir o tipo de usuário
-  const getUserType = (tipo) => {
-    const types = {
+  const getTipoUsuario = (tipo) => {
+    const tipos = {
       "1": "Administrador",
       "2": "Coordenador",
       "3": "Professor",
-      "4": "Manutenção",
-      "5": "Limpeza"
+      "4": "Equipe de Manutenção",
+      "5": "Equipe de Limpeza"
     };
-    return types[tipo] || "Usuário";
+    return tipos[tipo] || "Usuário";
   };
 
   return (
     <div className="app-container">
-      {/* Barra Vermelha Superior (MANTIDO EXATAMENTE COMO ESTÁ) */}
+      {/* Barra Vermelha Superior (MANTIDO IGUAL) */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
         </div>
         <nav>
+          <button onClick={() => navigate("/")}>CADASTRO</button>
           <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
           <button onClick={() => navigate('/userinicial')}>PERFIL</button>
         </nav>
       </header>
 
-      {/* Conteúdo Principal - Adaptado para exibir os dados */}
+      {/* Conteúdo Central - Dados do usuário logado */}
       <main className="main-content">
         {loading ? (
-          <p>Carregando...</p>
+          <p>Carregando seus dados...</p>
         ) : userData ? (
-          <>
-            <h2>Olá, {userData.adm1}!</h2>
-            <div className="profile-card">
-              <p><span className="profile-label">ID:</span> {userData.id}</p>
-              <p><span className="profile-label">Tipo:</span> {getUserType(userData.tipo)}</p>
-              <p><span className="profile-label">Status:</span> <span className="status aberta">Ativo</span></p>
+          <div className="user-profile-card">
+            <h2>Meu Perfil</h2>
+            <div className="profile-field">
+              <span className="field-label">Nome:</span>
+              <span className="field-value">{userData.adm1}</span>
             </div>
-          </>
+            <div className="profile-field">
+              <span className="field-label">Tipo:</span>
+              <span className="field-value">{getTipoUsuario(userData.tipo)}</span>
+            </div>
+            <div className="profile-field">
+              <span className="field-label">ID:</span>
+              <span className="field-value">{userData.id}</span>
+            </div>
+          </div>
         ) : (
-          <p>Não foi possível carregar os dados do usuário.</p>
+          <p>Não foi possível carregar seus dados.</p>
         )}
       </main>
     </div>
