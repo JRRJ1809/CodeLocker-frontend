@@ -1,49 +1,57 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import senaiLogo from '../../assets/senai-logo.png';
 import './Salas.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
 
 const Salas = () => {
-    // Estado das salas (com controle de checkboxes)
-    const [salas, setSalas] = useState([
-        { nome: 'Sala 101', capacidade: 20, disponivel: false },
-        { nome: 'Sala 202', capacidade: 15, disponivel: true },
-        { nome: 'Laboratorio de TI', capacidade: 10, disponivel: false },
-        { nome: 'Sala 303', capacidade: 25, disponivel: false },
-    ]);
+  const navigate = useNavigate();
 
-    // Função para toggle das checkboxes
-    const toggleDisponibilidade = (index) => {
-        const novasSalas = [...salas];
-        novasSalas[index].disponivel = !novasSalas[index].disponivel;
-        setSalas(novasSalas);
-    };
+  // Dados mockados das salas (substitua pela sua API)
+  const salas = [
+    { nome: 'Sala 101', capacidade: 20, disponivel: true },
+    { nome: 'Laboratório de TI', capacidade: 15, disponivel: false },
+    { nome: 'Sala 202', capacidade: 25, disponivel: true },
+    { nome: 'Auditório', capacidade: 50, disponivel: true }
+  ];
 
-    return (
-        <>
-            <Header />
-            <div className="salas-container">
-                <h1>Salas Disponíveis</h1>
-                <div className="sala-list">
-                    {salas.map((sala, index) => (
-                        <div key={index} className="sala-item">
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={sala.disponivel}
-                                    onChange={() => toggleDisponibilidade(index)}
-                                />
-                                <span className={sala.disponivel ? "disponivel" : "indisponivel"}>
-                                    {sala.nome} - Capacidade: {sala.capacidade} pessoas
-                                </span>
-                            </label>
-                        </div>
-                    ))}
-                </div>
+  return (
+    <div className="app-container">
+      {/* Barra Vermelha Superior */}
+      <header className="red-header">
+        <div className="logo-container">
+          <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
+        </div>
+        <nav>
+          <button onClick={() => navigate("/")}>CADASTRO</button>
+          <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/userinicial')}>PERFIL</button>
+        </nav>
+      </header>
+
+      {/* Conteúdo Principal */}
+      <main className="main-content">
+        <h1>SENAI</h1>
+        <h2>SALAS DISPONÍVEIS</h2>
+        
+        <div className="salas-list">
+          {salas.map((sala, index) => (
+            <div 
+              key={index} 
+              className={`sala-item ${sala.disponivel ? 'disponivel' : 'indisponivel'}`}
+            >
+              <div className="sala-info">
+                <h3>{sala.nome}</h3>
+                <p>Capacidade: {sala.capacidade} pessoas</p>
+              </div>
+              <div className="sala-status">
+                {sala.disponivel ? 'Disponível' : 'Ocupada'}
+              </div>
             </div>
-            <Footer />
-        </>
-    );
+          ))}
+        </div>
+      </main>
+    </div>
+  );
 };
 
 export default Salas;
