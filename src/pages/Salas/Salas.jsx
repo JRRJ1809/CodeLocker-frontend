@@ -40,7 +40,6 @@ const Salas = () => {
                         </div>
                     ))}
                 </div>
-                <p className="senai-footer">© 2025 SENAI - Todos os direitos reservados.</p>
             </div>
             <Footer />
         </>
