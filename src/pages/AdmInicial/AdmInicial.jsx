@@ -1,19 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import senaiLogo from '../../assets/senai-logo.png';
-import './AdminInicial.css';
+import './AdmInicial.css';
 
-const AdminInicial = () => {
+
+const AdmInicial = () => {
   const navigate = useNavigate();
 
   return (
+    <>
     <div className="app-container">
       {/* Barra Vermelha Superior com Logo */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
         </div>
-        <nav>
+        <nav className="nav-buttons">
           <button onClick={() => navigate('/cadastro')}>CADASTRO</button>
           <button onClick={() => navigate('/qrcode')}>QR CODE</button>
           <button onClick={() => navigate('/registros')}>REGISTROS</button>
@@ -42,7 +44,8 @@ const AdminInicial = () => {
         </div>
       </main>
     </div>
+    </>
   );
 };
 
-export default AdminInicial;
+export default AdmInicial;

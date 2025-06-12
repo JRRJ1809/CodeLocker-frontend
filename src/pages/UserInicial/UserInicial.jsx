@@ -16,8 +16,8 @@ const UserInicial = () => {
         </div>
         <nav>
           <button onClick={() => navigate('/qrcode')}>QR CODE</button>
-          <button onClick={() => navigate('/salas disponiveís')}>SALAS DISPONÍVEIS</button>
-          <button onClick={() => navigate('/perfil')}>USUÁRIO</button>
+          <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/perfiluser')}>PERFIL</button>
         </nav>
       </header>
 
