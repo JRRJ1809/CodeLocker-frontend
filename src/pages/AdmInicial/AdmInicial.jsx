@@ -17,11 +17,10 @@ const AdmInicial = () => {
         </div>
         <nav className="nav-buttons">
           <button onClick={() => navigate('/cadastro')}>CADASTRO</button>
-          <button onClick={() => navigate('/qrcode')}>QR CODE</button>
           <button onClick={() => navigate('/registros')}>REGISTROS</button>
           <button onClick={() => navigate('/cadastro-adm')}>CADASTRO ADM</button>
           <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
-          <button onClick={() => navigate('/admin')}>ADMIN</button>
+          <button onClick={() => navigate('/')}>TELA INICIAL</button>
         </nav>
       </header>
 
@@ -30,16 +29,8 @@ const AdmInicial = () => {
         <h2>Olá, Administrador!</h2>
         <div className="admin-stats">
           <div className="stat-card">
-            <h3>Usuários Ativos</h3>
-            <p className="stat-value">24</p>
-          </div>
-          <div className="stat-card">
             <h3>Salas Ocupadas</h3>
             <p className="stat-value">5/10</p>
-          </div>
-          <div className="stat-card">
-            <h3>Acessos Hoje</h3>
-            <p className="stat-value">42</p>
           </div>
         </div>
       </main>
