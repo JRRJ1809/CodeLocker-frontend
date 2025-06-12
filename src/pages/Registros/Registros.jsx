@@ -23,9 +23,11 @@ const Registros = () => {
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
         </div>
         <nav>
-          <button onClick={() => navigate('/cadastro-adm')}>CADASTRO ADM</button>
-          <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
           <button onClick={() => navigate('/registros')}>REGISTROS</button>
+          <button onClick={() => navigate('/cadastroadm')}>CRIAR USUÁRIO</button>
+          <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/')}>TELA INICIAL</button>
         </nav>
       </header>
 
