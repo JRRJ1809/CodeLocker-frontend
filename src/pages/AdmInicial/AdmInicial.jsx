@@ -20,7 +20,7 @@ const AdmInicial = () => {
           <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
           <button onClick={() => navigate('/registros')}>REGISTROS</button>
           <button onClick={() => navigate('/cadastroadm')}>CRIAR USUÁRIO</button>
-          <button onClick={() => navigate('/salas')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/salasvisaoadm')}>SALAS DISPONÍVEIS</button>
           <button onClick={() => navigate('/')}>TELA INICIAL</button>
         </nav>
       </header>

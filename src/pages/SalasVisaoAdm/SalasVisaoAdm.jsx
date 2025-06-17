@@ -1,18 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import senaiLogo from '../../assets/senai-logo.png';
-import './Registros.css';
+import './SalasVisaoAdm.css';
 
-const Registros = () => {
+const SalasVisaoAdm = () => {
   const navigate = useNavigate();
 
-  // Dados mockados dos registros (substitua pela sua API)
-  const registros = [
-    { hora: '07:32', nome: 'Marco Aurélio', acao: 'Entrada', sala: 'Sala B12' },
-    { hora: '07:32', nome: 'Marco Aurélio', acao: 'Entrada', sala: 'Sala B12' },
-    { hora: '07:32', nome: 'Marco Aurélio', acao: 'Entrada', sala: 'Sala B12' },
-    { hora: '07:32', nome: 'Marco Aurélio', acao: 'Entrada', sala: 'Sala B12' },
-    { hora: '07:32', nome: 'Marco Aurélio', acao: 'Entrada', sala: 'Sala B12' }
+  // Dados mockados das salas (substitua pela sua API)
+  const salas = [
+    { nome: 'Sala 101', capacidade: 20, disponivel: true },
+    { nome: 'Laboratório de TI', capacidade: 15, disponivel: false },
+    { nome: 'Sala 202', capacidade: 25, disponivel: true },
+    { nome: 'Auditório', capacidade: 50, disponivel: true }
   ];
 
   return (
@@ -34,25 +33,27 @@ const Registros = () => {
       {/* Conteúdo Principal */}
       <main className="main-content">
         <h1>SENAI</h1>
-        <h2>REGISTROS</h2>
+        <h2>SALAS DISPONÍVEIS</h2>
         
-        <div className="registros-table">
-          {registros.map((registro, index) => (
-            <div key={index} className="registro-item">
-              <span className="registro-hora">{registro.hora}</span>
-              <span className="registro-detalhes">
-                {registro.nome} - {registro.acao} - {registro.sala}
-              </span>
+        <div className="salas-list">
+          {salas.map((sala, index) => (
+            <div 
+              key={index} 
+              className={`sala-item ${sala.disponivel ? 'disponivel' : 'indisponivel'}`}
+            >
+              <div className="sala-info">
+                <h3>{sala.nome}</h3>
+                <p>Capacidade: {sala.capacidade} pessoas</p>
+              </div>
+              <div className="sala-status">
+                {sala.disponivel ? 'Disponível' : 'Ocupada'}
+              </div>
             </div>
           ))}
-        </div>
-
-        <div className="admin-label">
-          ADMINISTRADOR
         </div>
       </main>
     </div>
   );
 };
 
-export default Registros;
+export default SalasVisaoAdm;

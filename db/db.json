@@ -1,7 +1,7 @@
 {
   "adm": [
     {
-      "id": 1,
+      "id": "1",
       "adm1": "SIDRONIO",
       "senha": "teste1",
       "tipo": "1"
@@ -29,27 +29,35 @@
       "adm1": "aiai",
       "senha": "aiai",
       "tipo": "5"
+    },
+    {
+      "id": "6020",
+      "adm1": "pedro",
+      "senha": "1234",
+      "email": "pedro@gmail.com",
+      "telefone": "4321423432",
+      "tipo": "3"
     }
   ],
   "tipos": [
     {
-      "id": 1,
+      "id": "1",
       "tipo": "Admin"
     },
     {
-      "id": 2,
+      "id": "2",
       "tipo": "Coordenador"
     },
     {
-      "id": 3,
+      "id": "3",
       "tipo": "Professor"
     },
     {
-      "id": 4,
+      "id": "4",
       "tipo": "Manutenção"
     },
     {
-      "id": 5,
+      "id": "5",
       "tipo": "Limpeza"
     }
   ]
