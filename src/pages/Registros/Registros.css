@@ -1,4 +1,4 @@
-/* Barra Vermelha Superior */
+/* Barra Vermelha Superior - Melhorada */
 .red-header {
   background-color: #d32f2f;
   color: white;
@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .logo-container {
@@ -35,19 +36,36 @@
   color: white;
   font-weight: bold;
   cursor: pointer;
-  padding: 5px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s;
   font-size: 14px;
 }
 
-/* Conteúdo Principal */
+.red-header button:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.red-header button.active {
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* Conteúdo Principal - Atualizado */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  max-width: 800px;
+  padding: 30px 20px;
+  max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  width: 100%;
 }
 
 .main-content h1 {
@@ -59,37 +77,214 @@
 .main-content h2 {
   color: #333;
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 
-/* Tabela de Registros */
+/* Filtros e Busca */
+.filtros-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.search-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #d32f2f;
+}
+
+.filtros-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.filtro-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.filtro-btn.active {
+  background-color: #d32f2f;
+  color: white;
+  border-color: #d32f2f;
+}
+
+/* Tabela de Registros - Melhorada */
+.registros-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
 .registros-table {
   width: 100%;
-  border-top: 2px solid #d32f2f;
-  margin: 20px 0;
+  border-collapse: collapse;
+  font-size: 0.95rem;
 }
 
-.registro-item {
-  display: flex;
-  padding: 12px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.registro-hora {
-  width: 60px;
-  font-weight: bold;
+.registros-table th {
+  background-color: #f0f0f0;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
   color: #333;
+  border-bottom: 2px solid #d32f2f;
 }
 
-.registro-detalhes {
-  flex: 1;
+.registros-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
   color: #555;
 }
 
-/* Label Administrador */
-.admin-label {
+.registro-item:hover {
+  background-color: #f9f9f9;
+}
+
+.registro-hora {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Badges de Ação */
+.acao-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.acao-badge.entrada {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.acao-badge.saida {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Ações do Admin */
+.admin-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
   margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.export-btn {
+  padding: 10px 20px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.export-btn:hover {
+  background-color: #1b5e20;
+}
+
+.admin-label {
   font-weight: bold;
   color: #d32f2f;
+  font-size: 1rem;
+}
+
+/* Estados Especiais */
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #d32f2f;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: #666;
   font-size: 1.1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .red-header nav {
+    gap: 8px;
+  }
+  
+  .red-header button {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  
+  .filtros-container {
+    gap: 15px;
+  }
+  
+  .registros-table {
+    font-size: 0.85rem;
+  }
+  
+  .registros-table th,
+  .registros-table td {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .filtros-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filtro-btn {
+    width: 100%;
+  }
 }
