@@ -1,4 +1,22 @@
-/* Barra Vermelha Superior */
+/* Estilos Globais */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estrutura Principal */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  position: relative;
+  padding-bottom: 100px; /* Espaço aumentado para o footer */
+}
+
+/* Barra Superior */
 .red-header {
   background-color: #d32f2f;
   color: white;
@@ -7,10 +25,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
 }
 
 .logo-container {
-  padding: 5px 0;
+  padding: 10px 0;
 }
 
 .senai-logo {
@@ -35,27 +56,161 @@
   color: white;
   font-weight: bold;
   cursor: pointer;
-  padding: 5px;
+  padding: 5px 10px;
+  transition: all 0.3s;
 }
 
-/* Conteúdo Principal */
-.main-content {
+.red-header button:hover {
+  text-decoration: underline;
+}
+
+/* Conteúdo Principal - ATUALIZADO */
+.profile-main-wrapper {
   flex: 1;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
+  align-items: center;
+  min-height: calc(100vh - 180px); /* Calcula altura considerando header e footer */
 }
 
-.main-content h2 {
+/* Cartão de Perfil - ATUALIZADO */
+.profile-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 40px;
+  max-width: 700px;
+  width: 90%;
+  margin: 20px auto;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 5;
+}
+
+.profile-card:hover {
+  box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+  transform: translateY(-22px);
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-header h2 {
   color: #333;
-  margin-bottom: 10px;
+  font-size: 24px;
 }
 
-/* Status Fixo */
-.status.aberta {
-  color: red;
-  font-weight: bold;
-  font-size: 1.2em;
+/* Seções */
+.profile-section {
+  margin-bottom: 30px;
+}
+
+.profile-section h3 {
+  color: #d32f2f;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 18px;
+}
+
+/* Grid de Informações */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #555;
+  min-width: 120px;
+}
+
+.info-value {
+  color: #333;
+  text-align: right;
+  max-width: 70%;
+  word-break: break-word;
+}
+
+/* Rodapé - NOVO ESTILO */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #d32f2f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+/* Responsividade - ATUALIZADO */
+@media (max-width: 768px) {
+  .profile-main-wrapper {
+    min-height: calc(100vh - 160px);
+    padding: 30px 15px;
+  }
+  
+  .profile-card {
+    padding: 25px;
+    width: 95%;
+    transform: none;
+  }
+  
+  .profile-card:hover {
+    transform: none;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .info-value {
+    text-align: left;
+    max-width: 100%;
+  }
+  
+  .footer {
+    height: 50px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-main-wrapper {
+    padding: 20px 10px;
+  }
+  
+  .profile-card {
+    padding: 20px 15px;
+  }
+  
+  .profile-section h3 {
+    font-size: 16px;
+  }
 }
