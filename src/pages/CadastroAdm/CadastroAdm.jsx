@@ -21,16 +21,16 @@ const CadastroAdm = () => {
   });
   const [erro, setErro] = useState('');
   const [sucesso, setSucesso] = useState('');
+  const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ 
+    key: 'nome', 
+    direction: 'ascending' 
+  });
 
   // Busca tipos de usuário
   useEffect(() => {
     const fetchTiposUsuario = async () => {
       try {
-        // Substitua pela sua API real
-        // const response = await fetch('http://sua-api/tipos-usuario');
-        // const data = await response.json();
-        
-        // Mock de dados
         const data = [
           { id: 1, nome: 'Administrador' },
           { id: 2, nome: 'Professor' },
@@ -53,14 +53,21 @@ const CadastroAdm = () => {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        // Substitua pela sua API real
-        // const response = await fetch('http://sua-api/usuarios');
-        // const data = await response.json();
-        
-        // Mock de dados
         const data = [
-          { id: 1, nome: 'Admin Master', email: 'master@senai.com', telefone: '(11) 9999-9999', tipo: 1 },
-          { id: 2, nome: 'Professor João', email: 'joao@senai.com', telefone: '(11) 8888-8888', tipo: 2 }
+          { 
+            id: 1, 
+            nome: 'Admin Master', 
+            email: 'master@senai.com', 
+            telefone: '(11) 9999-9999', 
+            tipo: 1 
+          },
+          { 
+            id: 2, 
+            nome: 'Professor João', 
+            email: 'joao@senai.com', 
+            telefone: '(11) 8888-8888', 
+            tipo: 2 
+          }
         ];
         
         setUsuarios(data);
@@ -79,12 +86,35 @@ const CadastroAdm = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedUsuarios = React.useMemo(() => {
+    return [...usuarios].sort((a, b) => {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      
+      if (aValue < bValue) {
+        return sortConfig.direction === 'ascending' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [usuarios, sortConfig]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErro('');
     setSucesso('');
 
-    // Validação básica
+    // Validação
     if (!formData.nome || !formData.email || !formData.senha || !formData.tipo) {
       setErro('Preencha todos os campos obrigatórios');
       return;
@@ -95,17 +125,14 @@ const CadastroAdm = () => {
       return;
     }
 
+    if (formData.senha.length < 6) {
+      setErro('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+
     try {
       setLoading(prev => ({ ...prev, cadastro: true }));
       
-      // Substitua pela chamada real à sua API
-      // const response = await fetch('http://sua-api/usuarios', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
-      
-      // Simulação de resposta da API
       await new Promise(resolve => setTimeout(resolve, 1000));
       const novoUsuario = {
         id: usuarios.length + 1,
@@ -130,14 +157,10 @@ const CadastroAdm = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Tem certeza que deseja excluir este usuário?')) return;
-    
     try {
-      // Substitua pela chamada real à sua API
-      // await fetch(`http://sua-api/usuarios/${id}`, { method: 'DELETE' });
-      
       setUsuarios(prev => prev.filter(user => user.id !== id));
       setSucesso('Usuário excluído com sucesso!');
+      setUsuarioParaExcluir(null);
     } catch (error) {
       setErro('Erro ao excluir usuário');
     }
@@ -145,10 +168,11 @@ const CadastroAdm = () => {
 
   return (
     <div className="cadastro-adm-container">
-      {/* Cabeçalho Fixo */}
+      {/* Cabeçalho Fixo Simplificado */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
+          <h1 className="system-title">Gestão de Usuários</h1>
         </div>
         <nav>
           <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
@@ -159,6 +183,30 @@ const CadastroAdm = () => {
         </nav>
       </header>
 
+      {/* Modal de Confirmação */}
+      {usuarioParaExcluir && (
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <h3>Confirmar Exclusão</h3>
+            <p>Tem certeza que deseja excluir o usuário {usuarioParaExcluir.nome}?</p>
+            <div className="modal-buttons">
+              <button 
+                className="confirm-btn"
+                onClick={() => handleDelete(usuarioParaExcluir.id)}
+              >
+                Confirmar
+              </button>
+              <button 
+                className="cancel-btn"
+                onClick={() => setUsuarioParaExcluir(null)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Conteúdo Principal */}
       <main className="main-content">
         <h1 className="page-title">Gerenciamento de Usuários</h1>
@@ -166,7 +214,7 @@ const CadastroAdm = () => {
         {/* Formulário de Cadastro */}
         <form onSubmit={handleSubmit} className="user-form">
           <div className="form-group">
-            <label htmlFor="nome">Nome Completo*</label>
+            <label htmlFor="nome">Nome Completo <span className="required">*</span></label>
             <input
               type="text"
               id="nome"
@@ -179,7 +227,7 @@ const CadastroAdm = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">E-mail*</label>
+            <label htmlFor="email">E-mail <span className="required">*</span></label>
             <input
               type="email"
               id="email"
@@ -204,7 +252,7 @@ const CadastroAdm = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="senha">Senha*</label>
+            <label htmlFor="senha">Senha <span className="required">*</span></label>
             <input
               type="password"
               id="senha"
@@ -218,7 +266,7 @@ const CadastroAdm = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="tipo">Tipo de Usuário*</label>
+            <label htmlFor="tipo">Tipo de Usuário <span className="required">*</span></label>
             <select
               id="tipo"
               name="tipo"
@@ -265,15 +313,27 @@ const CadastroAdm = () => {
               <table className="users-table">
                 <thead>
                   <tr>
-                    <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>Telefone</th>
+                    <th onClick={() => handleSort('nome')}>
+                      Nome {sortConfig.key === 'nome' && (
+                        sortConfig.direction === 'ascending' ? '↑' : '↓'
+                      )}
+                    </th>
+                    <th onClick={() => handleSort('email')}>
+                      E-mail {sortConfig.key === 'email' && (
+                        sortConfig.direction === 'ascending' ? '↑' : '↓'
+                      )}
+                    </th>
+                    <th onClick={() => handleSort('telefone')}>
+                      Telefone {sortConfig.key === 'telefone' && (
+                        sortConfig.direction === 'ascending' ? '↑' : '↓'
+                      )}
+                    </th>
                     <th>Tipo</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {usuarios.map(usuario => {
+                  {sortedUsuarios.map(usuario => {
                     const tipoUsuario = tiposUsuario.find(t => t.id === usuario.tipo)?.nome || 'Desconhecido';
                     return (
                       <tr key={usuario.id}>
@@ -284,10 +344,10 @@ const CadastroAdm = () => {
                         <td>
                           <button 
                             className="delete-btn"
-                            onClick={() => handleDelete(usuario.id)}
+                            onClick={() => setUsuarioParaExcluir(usuario)}
                             title="Excluir usuário"
                           >
-                            ×
+                            🗑️
                           </button>
                         </td>
                       </tr>
