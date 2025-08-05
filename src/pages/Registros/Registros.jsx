@@ -161,12 +161,8 @@ const Registros = () => {
         </div>
 
         <div className="admin-actions">
-          <button className="export-btn">
-            Exportar para Excel
-          </button>
-          <span className="admin-label">
-            ADMINISTRADOR
-          </span>
+          
+        
         </div>
       </main>
     </div>
