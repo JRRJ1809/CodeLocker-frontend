@@ -171,12 +171,7 @@ const SalasVisaoAdm = () => {
           )}
         </div>
         
-        <button 
-          className="add-sala-btn"
-          onClick={() => navigate('/adicionar-sala')}
-        >
-          + Adicionar Nova Sala
-        </button>
+
       </main>
     </div>
   );
