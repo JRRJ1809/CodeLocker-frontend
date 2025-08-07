@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/senai-logo.png';
-import Header from '../../components/Header/Header.jsx'; // Importação do Header
+import Header from '../../components/Header/Header.jsx';
 import Footer from '../../components/Footer/Footer.jsx';
+import userIcon from '../../assets/user-icon.png'; // Importação do ícone de usuário
+import passwordIcon from '../../assets/password-icon.png'; // Importação do ícone de senha
 import './Adm.css';
 
 const urlAdm = 'http://localhost:4000/adm';
@@ -36,7 +38,7 @@ const Adm = () => {
 
   return (
     <>
-      <Header /> {/* Header adicionado aqui */}
+      <Header />
       <div className="adm-container">
         <div className="adm-box">
           <div className="login-boxx">
@@ -44,7 +46,10 @@ const Adm = () => {
             <h2>Login do Administrador</h2>
 
             <div className="form-group">
-              <label>Login</label>
+              <label>
+                <img src={userIcon} alt="Ícone Usuário" className="icon" />
+                Login
+              </label>
               <input
                 type="text"
                 placeholder="Usuário do ADM"
@@ -54,7 +59,10 @@ const Adm = () => {
             </div>
 
             <div className="form-group">
-              <label>Senha</label>
+              <label>
+                <img src={passwordIcon} alt="Ícone Senha" className="icon" />
+                Senha
+              </label>
               <input
                 type="password"
                 placeholder="Senha"
