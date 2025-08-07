@@ -172,7 +172,7 @@ const CadastroAdm = () => {
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
-          <h1 className="system-title">Gestão de Usuários</h1>
+          <h1 className="system-title"></h1>
         </div>
         <nav>
           <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
