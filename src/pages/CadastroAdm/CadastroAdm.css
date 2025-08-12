@@ -4,9 +4,10 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
 }
 
-/* Cabeçalho Fixo Simplificado */
+/* Cabeçalho Fixo (original) */
 .red-header {
   background-color: #C00D0D;
   color: white;
@@ -15,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
   z-index: 1000;
@@ -57,80 +58,14 @@
 }
 
 .red-header button:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .red-header button.active {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Modal de Confirmação */
-.confirmation-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1001;
-}
-
-.confirmation-modal {
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-.confirmation-modal h3 {
-  margin-top: 0;
-  color: #333;
-}
-
-.confirmation-modal p {
-  margin-bottom: 20px;
-  color: #555;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.confirm-btn, .cancel-btn {
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.confirm-btn {
-  background-color: #d32f2f;
-  color: white;
-  border: none;
-}
-
-.confirm-btn:hover {
-  background-color: #b71c1c;
-}
-
-.cancel-btn {
-  background-color: #f5f5f5;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.cancel-btn:hover {
-  background-color: #e0e0e0;
-}
-
-/* Conteúdo Principal */
+/* Conteúdo Principal (original) */
 .main-content {
   flex: 1;
   display: flex;
@@ -149,17 +84,68 @@
   font-weight: 600;
 }
 
-/* Formulário */
-.user-form {
+/* Botão para abrir o modal (NOVO) */
+.open-modal-btn {
+  background-color: #C00D0D;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 auto 20px;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+.open-modal-btn:hover {
+  background-color: #A00B0B;
+}
+
+/* Modal de Cadastro (NOVO) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1002; /* Acima do header */
+}
+
+.modal-content {
   background: white;
-  border-radius: 10px;
   padding: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  margin-bottom: 40px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Formulário (original, agora dentro do modal) */
+.user-form {
+  margin-top: 20px;
 }
 
 .form-group {
@@ -190,11 +176,7 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #d32f2f;
-}
-
-.form-group input[type="password"] {
-  letter-spacing: 1px;
+  border-color: #C00D0D;
 }
 
 .submit-btn {
@@ -227,7 +209,7 @@
 .spinner {
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: white;
   animation: spin 1s ease-in-out infinite;
@@ -237,7 +219,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* Mensagens */
+/* Mensagens (original) */
 .error-message {
   color: #d32f2f;
   background-color: #ffebee;
@@ -256,12 +238,12 @@
   text-align: center;
 }
 
-/* Lista de Usuários */
+/* Lista de Usuários (original) */
 .users-section {
   background: white;
   border-radius: 10px;
   padding: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
@@ -334,7 +316,73 @@
   margin: 30px auto;
 }
 
-/* Responsividade */
+/* Modal de Confirmação (original) */
+.confirmation-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+}
+
+.confirmation-modal {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.confirmation-modal h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.confirmation-modal p {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-btn, .cancel-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.confirm-btn {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+}
+
+.confirm-btn:hover {
+  background-color: #b71c1c;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Responsividade (original) */
 @media (max-width: 768px) {
   .main-content {
     padding: 110px 15px 30px;
