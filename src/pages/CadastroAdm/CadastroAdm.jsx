@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import senaiLogo from '../../assets/senai-logo.png';
 import './CadastroAdm.css';
 
 const CadastroAdm = () => {
   const navigate = useNavigate();
+  const [modalAberto, setModalAberto] = useState(false); // Novo estado para o modal
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -27,7 +28,7 @@ const CadastroAdm = () => {
     direction: 'ascending' 
   });
 
-  // Busca tipos de usuário
+  // Busca tipos de usuário (original)
   useEffect(() => {
     const fetchTiposUsuario = async () => {
       try {
@@ -36,7 +37,6 @@ const CadastroAdm = () => {
           { id: 2, nome: 'Professor' },
           { id: 3, nome: 'Funcionário' }
         ];
-        
         setTiposUsuario(data);
         setFormData(prev => ({ ...prev, tipo: data[0]?.id.toString() || '' }));
         setLoading(prev => ({ ...prev, tipos: false }));
@@ -45,11 +45,10 @@ const CadastroAdm = () => {
         setLoading(prev => ({ ...prev, tipos: false }));
       }
     };
-
     fetchTiposUsuario();
   }, []);
 
-  // Busca usuários cadastrados
+  // Busca usuários cadastrados (original)
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
@@ -69,7 +68,6 @@ const CadastroAdm = () => {
             tipo: 2 
           }
         ];
-        
         setUsuarios(data);
         setLoading(prev => ({ ...prev, lista: false }));
       } catch (error) {
@@ -77,44 +75,20 @@ const CadastroAdm = () => {
         setLoading(prev => ({ ...prev, lista: false }));
       }
     };
-
     fetchUsuarios();
   }, []);
 
+  // Funções originais (totalmente preservadas)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
-  const handleSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const sortedUsuarios = React.useMemo(() => {
-    return [...usuarios].sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-      
-      if (aValue < bValue) {
-        return sortConfig.direction === 'ascending' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortConfig.direction === 'ascending' ? 1 : -1;
-      }
-      return 0;
-    });
-  }, [usuarios, sortConfig]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErro('');
     setSucesso('');
 
-    // Validação
     if (!formData.nome || !formData.email || !formData.senha || !formData.tipo) {
       setErro('Preencha todos os campos obrigatórios');
       return;
@@ -132,8 +106,8 @@ const CadastroAdm = () => {
 
     try {
       setLoading(prev => ({ ...prev, cadastro: true }));
-      
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
       const novoUsuario = {
         id: usuarios.length + 1,
         ...formData,
@@ -149,6 +123,7 @@ const CadastroAdm = () => {
         tipo: tiposUsuario[0]?.id.toString() || ''
       });
       setSucesso('Usuário cadastrado com sucesso!');
+      setModalAberto(false); // Fecha o modal após cadastro
     } catch (error) {
       setErro('Erro ao cadastrar usuário. Tente novamente.');
     } finally {
@@ -166,9 +141,27 @@ const CadastroAdm = () => {
     }
   };
 
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedUsuarios = useMemo(() => {
+    return [...usuarios].sort((a, b) => {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
+      return 0;
+    });
+  }, [usuarios, sortConfig]);
+
   return (
     <div className="cadastro-adm-container">
-      {/* Cabeçalho Fixo Simplificado */}
+      {/* Cabeçalho Fixo (original) */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
@@ -183,124 +176,125 @@ const CadastroAdm = () => {
         </nav>
       </header>
 
-      {/* Modal de Confirmação */}
-      {usuarioParaExcluir && (
-        <div className="confirmation-modal-overlay">
-          <div className="confirmation-modal">
-            <h3>Confirmar Exclusão</h3>
-            <p>Tem certeza que deseja excluir o usuário {usuarioParaExcluir.nome}?</p>
-            <div className="modal-buttons">
+      {/* Modal de Cadastro (NOVO - mas com o formulário original dentro) */}
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button 
+              onClick={() => {
+                setModalAberto(false);
+                setErro('');
+                setSucesso('');
+              }} 
+              className="close-modal-btn"
+            >
+              X
+            </button>
+            <h2>Cadastrar Novo Usuário</h2>
+            <form onSubmit={handleSubmit} className="user-form">
+              <div className="form-group">
+                <label htmlFor="nome">Nome Completo <span className="required">*</span></label>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  placeholder="Digite o nome do usuário"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">E-mail <span className="required">*</span></label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Digite o e-mail do usuário"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="telefone">Telefone</label>
+                <input
+                  type="tel"
+                  id="telefone"
+                  name="telefone"
+                  value={formData.telefone}
+                  onChange={handleChange}
+                  placeholder="Digite o telefone do usuário"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="senha">Senha <span className="required">*</span></label>
+                <input
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  value={formData.senha}
+                  onChange={handleChange}
+                  placeholder="Digite uma senha segura"
+                  required
+                  minLength="6"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="tipo">Tipo de Usuário <span className="required">*</span></label>
+                <select
+                  id="tipo"
+                  name="tipo"
+                  value={formData.tipo}
+                  onChange={handleChange}
+                  required
+                  disabled={loading.tipos}
+                >
+                  {tiposUsuario.map(tipo => (
+                    <option key={tipo.id} value={tipo.id}>
+                      {tipo.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <button 
-                className="confirm-btn"
-                onClick={() => handleDelete(usuarioParaExcluir.id)}
+                type="submit" 
+                className="submit-btn"
+                disabled={loading.cadastro}
               >
-                Confirmar
+                {loading.cadastro ? (
+                  <>
+                    <span className="spinner"></span>
+                    Cadastrando...
+                  </>
+                ) : 'Salvar'}
               </button>
-              <button 
-                className="cancel-btn"
-                onClick={() => setUsuarioParaExcluir(null)}
-              >
-                Cancelar
-              </button>
-            </div>
+
+              {erro && <div className="error-message">{erro}</div>}
+              {sucesso && <div className="success-message">{sucesso}</div>}
+            </form>
           </div>
         </div>
       )}
 
-      {/* Conteúdo Principal */}
+      {/* Conteúdo Principal (original) */}
       <main className="main-content">
         <h1 className="page-title">Gerenciamento de Usuários</h1>
         
-        {/* Formulário de Cadastro */}
-        <form onSubmit={handleSubmit} className="user-form">
-          <div className="form-group">
-            <label htmlFor="nome">Nome Completo <span className="required">*</span></label>
-            <input
-              type="text"
-              id="nome"
-              name="nome"
-              value={formData.nome}
-              onChange={handleChange}
-              placeholder="Digite o nome do usuário"
-              required
-            />
-          </div>
+        {/* Botão para abrir o modal (NOVO) */}
+        <button 
+          onClick={() => setModalAberto(true)} 
+          className="open-modal-btn"
+        >
+          + Adicionar Usuário
+        </button>
 
-          <div className="form-group">
-            <label htmlFor="email">E-mail <span className="required">*</span></label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Digite o e-mail do usuário"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="telefone">Telefone</label>
-            <input
-              type="tel"
-              id="telefone"
-              name="telefone"
-              value={formData.telefone}
-              onChange={handleChange}
-              placeholder="Digite o telefone do usuário"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="senha">Senha <span className="required">*</span></label>
-            <input
-              type="password"
-              id="senha"
-              name="senha"
-              value={formData.senha}
-              onChange={handleChange}
-              placeholder="Digite uma senha segura"
-              required
-              minLength="6"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="tipo">Tipo de Usuário <span className="required">*</span></label>
-            <select
-              id="tipo"
-              name="tipo"
-              value={formData.tipo}
-              onChange={handleChange}
-              required
-              disabled={loading.tipos}
-            >
-              {tiposUsuario.map(tipo => (
-                <option key={tipo.id} value={tipo.id}>
-                  {tipo.nome}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <button 
-            type="submit" 
-            className="submit-btn"
-            disabled={loading.cadastro}
-          >
-            {loading.cadastro ? (
-              <>
-                <span className="spinner"></span>
-                Cadastrando...
-              </>
-            ) : 'Adicionar Usuário'}
-          </button>
-
-          {erro && <div className="error-message">{erro}</div>}
-          {sucesso && <div className="success-message">{sucesso}</div>}
-        </form>
-
-        {/* Lista de Usuários */}
+        {/* Lista de Usuários (original) */}
         <section className="users-section">
           <h2>Usuários Cadastrados</h2>
           
@@ -359,6 +353,30 @@ const CadastroAdm = () => {
           )}
         </section>
       </main>
+
+      {/* Modal de Confirmação de Exclusão (original) */}
+      {usuarioParaExcluir && (
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <h3>Confirmar Exclusão</h3>
+            <p>Tem certeza que deseja excluir o usuário {usuarioParaExcluir.nome}?</p>
+            <div className="modal-buttons">
+              <button 
+                className="confirm-btn"
+                onClick={() => handleDelete(usuarioParaExcluir.id)}
+              >
+                Confirmar
+              </button>
+              <button 
+                className="cancel-btn"
+                onClick={() => setUsuarioParaExcluir(null)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
