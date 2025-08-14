@@ -28,52 +28,51 @@ const CadastroAdm = () => {
     direction: 'ascending'
   });
 
+  const fetchUsuarios = async () => {
+    try {
+      setLoading(prev => ({ ...prev, lista: true }));
+      const response = await fetch('http://10.90.146.23:7010/api/Usuarios/ListarUsuarios');
+      if (!response.ok) {
+        throw new Error('Erro ao buscar usuários');
+      }
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setUsuarios(data);
+      } else {
+        setErro('Resposta inesperada da API');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar lista de usuários:', error);
+      setErro('Erro ao carregar lista de usuários');
+    } finally {
+      setLoading(prev => ({ ...prev, lista: false }));
+    }
+  };
+
   // Busca tipos de usuário
   useEffect(() => {
     const fetchTiposUsuario = async () => {
       try {
-        const data = [
-          { id: 1, nome: 'Administrador' },
-          { id: 2, nome: 'Professor' },
-          { id: 3, nome: 'Funcionário' }
-        ];
+        setLoading(prev => ({ ...prev, tipos: true }));
+        const response = await fetch("http://10.90.146.23:7010/api/Tipos/ListarTipos");
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        const data = await response.json();
         setTiposUsuario(data);
         setFormData(prev => ({ ...prev, tipo: data[0]?.id.toString() || '' }));
-        setLoading(prev => ({ ...prev, tipos: false }));
       } catch (error) {
+        console.error('Erro ao carregar tipos de usuário: ', error);
         setErro('Erro ao carregar tipos de usuário');
+      } finally {
         setLoading(prev => ({ ...prev, tipos: false }));
       }
     };
     fetchTiposUsuario();
   }, []);
 
-  // Busca usuários cadastrados via API
+  // Busca usuários cadastrados
   useEffect(() => {
-    const fetchUsuarios = async () => {
-      try {
-        const response = await fetch('http://10.90.146.23:7010/api/Usuarios/ListarUsuarios');
-
-        if (!response.ok) {
-          throw new Error('Erro ao buscar usuários');
-        }
-
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          setUsuarios(data);
-        } else {
-          setErro('Resposta inesperada da API');
-        }
-
-        setLoading(prev => ({ ...prev, lista: false }));
-      } catch (error) {
-        console.error('Erro ao carregar lista de usuários:', error);
-        setErro('Erro ao carregar lista de usuários');
-        setLoading(prev => ({ ...prev, lista: false }));
-      }
-    };
-
     fetchUsuarios();
   }, []);
 
@@ -104,15 +103,28 @@ const CadastroAdm = () => {
 
     try {
       setLoading(prev => ({ ...prev, cadastro: true }));
-      await new Promise(resolve => setTimeout(resolve, 1000));
 
       const novoUsuario = {
-        id: usuarios.length + 1,
-        ...formData,
+        nome: formData.nome,
+        email: formData.email,
+        telefone: formData.telefone,
+        senha: formData.senha,
         tipo: parseInt(formData.tipo)
       };
 
-      setUsuarios(prev => [...prev, novoUsuario]);
+      const response = await fetch('http://10.90.146.23:7010/api/Usuarios/CadastrarUsuario', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(novoUsuario)
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao cadastrar usuário');
+      }
+
+      await fetchUsuarios();
       setFormData({
         nome: '',
         email: '',
@@ -130,11 +142,52 @@ const CadastroAdm = () => {
   };
 
   const handleDelete = async (id) => {
+    setErro('');
+    setSucesso('');
+    console.log("Tentando excluir ID:", id);
+
     try {
-      setUsuarios(prev => prev.filter(user => user.id !== id));
-      setSucesso('Usuário excluído com sucesso!');
-      setUsuarioParaExcluir(null);
+      // 1º - Tenta com query string
+      let response = await fetch(`http://10.90.146.23:7010/api/Usuarios/DeletarUsuario?id=${id}`, {
+        method: 'DELETE',
+      });
+      console.log("Query string delete:", response.status);
+      if (response.ok) {
+        await fetchUsuarios();
+        setSucesso('Usuário excluído com sucesso!');
+        setUsuarioParaExcluir(null);
+        return;
+      }
+
+      // 2º - Tenta com segment na URL
+      response = await fetch(`http://10.90.146.23:7010/api/Usuarios/DeletarUsuario/${id}`, {
+        method: 'DELETE',
+      });
+      console.log("Segment delete:", response.status);
+      if (response.ok) {
+        await fetchUsuarios();
+        setSucesso('Usuário excluído com sucesso!');
+        setUsuarioParaExcluir(null);
+        return;
+      }
+
+      // 3º - Tenta enviando no body
+      response = await fetch(`http://10.90.146.23:7010/api/Usuarios/DeletarUsuario`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      console.log("Body delete:", response.status);
+      if (response.ok) {
+        await fetchUsuarios();
+        setSucesso('Usuário excluído com sucesso!');
+        setUsuarioParaExcluir(null);
+        return;
+      }
+
+      throw new Error("Nenhum dos formatos de exclusão funcionou");
     } catch (error) {
+      console.error("Erro ao excluir:", error);
       setErro('Erro ao excluir usuário');
     }
   };
@@ -149,8 +202,8 @@ const CadastroAdm = () => {
 
   const sortedUsuarios = useMemo(() => {
     return [...usuarios].sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
+      const aValue = a[sortConfig.key] ?? '';
+      const bValue = b[sortConfig.key] ?? '';
       if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
       return 0;
@@ -200,7 +253,6 @@ const CadastroAdm = () => {
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="email">E-mail <span className="required">*</span></label>
                 <input
@@ -213,7 +265,6 @@ const CadastroAdm = () => {
                   required
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="telefone">Telefone</label>
                 <input
@@ -225,7 +276,6 @@ const CadastroAdm = () => {
                   placeholder="Digite o telefone do usuário"
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="senha">Senha <span className="required">*</span></label>
                 <input
@@ -239,7 +289,6 @@ const CadastroAdm = () => {
                   minLength="6"
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="tipo">Tipo de Usuário <span className="required">*</span></label>
                 <select
@@ -252,12 +301,11 @@ const CadastroAdm = () => {
                 >
                   {tiposUsuario.map(tipo => (
                     <option key={tipo.id} value={tipo.id}>
-                      {tipo.nome}
+                      {tipo.tipo}
                     </option>
                   ))}
                 </select>
               </div>
-
               <button
                 type="submit"
                 className="submit-btn"
@@ -270,7 +318,6 @@ const CadastroAdm = () => {
                   </>
                 ) : 'Salvar'}
               </button>
-
               {erro && <div className="error-message">{erro}</div>}
               {sucesso && <div className="success-message">{sucesso}</div>}
             </form>
@@ -280,17 +327,14 @@ const CadastroAdm = () => {
 
       <main className="main-content">
         <h1 className="page-title">Gerenciamento de Usuários</h1>
-
         <button
           onClick={() => setModalAberto(true)}
           className="open-modal-btn"
         >
           + Adicionar Usuário
         </button>
-
         <section className="users-section">
           <h2>Usuários Cadastrados</h2>
-
           {loading.lista ? (
             <div className="loading-spinner"></div>
           ) : usuarios.length === 0 ? (
@@ -321,7 +365,7 @@ const CadastroAdm = () => {
                 </thead>
                 <tbody>
                   {sortedUsuarios.map(usuario => {
-                    const tipoUsuario = tiposUsuario.find(t => t.id === usuario.tipo)?.nome || 'Desconhecido';
+                    const tipoUsuario = tiposUsuario.find(t => t.id === usuario.tipo)?.tipo || 'Desconhecido';
                     return (
                       <tr key={usuario.id}>
                         <td>{usuario.nome}</td>
