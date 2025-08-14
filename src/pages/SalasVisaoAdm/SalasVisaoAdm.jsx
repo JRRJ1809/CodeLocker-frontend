@@ -11,26 +11,26 @@ const SalasVisaoAdm = () => {
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState(null);
 
-  // Simulação de API - substitua pelo seu endpoint real
   useEffect(() => {
     const fetchSalas = async () => {
       try {
-        // Substitua por: const response = await fetch('sua-api/salas');
-        // const data = await response.json();
-        
-        // Dados mockados melhorados
-        const data = [
-          { id: 1, nome: 'Sala 101', capacidade: 50, disponivel: true, tipo: 'Sala de Aula' },
-          { id: 2, nome: 'Laboratório de TI', capacidade: 15, disponivel: false, tipo: 'Laboratório' },
-          { id: 3, nome: 'Sala 202', capacidade: 25, disponivel: true, tipo: 'Sala de Aula' },
-          { id: 4, nome: 'Auditório', capacidade: 50, disponivel: true, tipo: 'Auditório' }
-        ];
-        
-        setSalas(data);
-        setLoading(false);
+        const response = await fetch('http://10.90.146.23:7010/api/Salas/LsitarSalas');
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setSalas(data);
+        } else {
+          setError('Resposta inesperada da API');
+        }
       } catch (error) {
         console.error("Erro ao carregar salas:", error);
         setError("Falha ao carregar salas. Tente recarregar a página.");
+      } finally {
         setLoading(false);
       }
     };
@@ -38,13 +38,11 @@ const SalasVisaoAdm = () => {
     fetchSalas();
   }, []);
 
-  // Função para alternar status da sala
+  // Função para alternar status da sala (apenas simulação local)
   const toggleStatus = async (salaId) => {
     try {
-      // Substitua pela chamada real à sua API
-      // await fetch(`sua-api/salas/${salaId}/status`, { method: 'PUT' });
-      
-      setSalas(salas.map(sala => 
+      // Aqui você pode colocar a chamada real para alterar o status na API
+      setSalas(salas.map(sala =>
         sala.id === salaId ? { ...sala, disponivel: !sala.disponivel } : sala
       ));
     } catch (error) {
@@ -55,13 +53,13 @@ const SalasVisaoAdm = () => {
   // Filtragem e busca
   const filteredSalas = salas.filter(sala => {
     const matchesSearch = sala.nome.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = 
+    const matchesFilter =
       filter === 'all' ||
       (filter === 'available' && sala.disponivel) ||
       (filter === 'unavailable' && !sala.disponivel) ||
       (filter === 'classroom' && sala.tipo === 'Sala de Aula') ||
       (filter === 'lab' && sala.tipo === 'Laboratório');
-    
+
     return matchesSearch && matchesFilter;
   });
 
@@ -108,9 +106,9 @@ const SalasVisaoAdm = () => {
         <div className="header-section">
           <h1>SENAI</h1>
           <h2>SALAS DISPONÍVEIS</h2>
-          
+
           {error && <div className="error-message">{error}</div>}
-          
+
           <div className="search-filter">
             <input 
               type="text" 
@@ -127,7 +125,7 @@ const SalasVisaoAdm = () => {
             </select>
           </div>
         </div>
-        
+
         <div className="salas-grid">
           {filteredSalas.length > 0 ? (
             filteredSalas.map((sala) => (
@@ -139,13 +137,13 @@ const SalasVisaoAdm = () => {
                   <h3>{sala.nome}</h3>
                   <span className="sala-tipo">{sala.tipo}</span>
                 </div>
-                
+
                 <div className="sala-content">
                   <div className="sala-details">
                     <span className="capacity-icon">👥</span>
                     <span>{sala.capacidade} pessoas</span>
                   </div>
-                  
+
                   <div className="sala-actions">
                     <button 
                       className={`status-btn ${sala.disponivel ? 'disponivel' : 'indisponivel'}`}
@@ -153,7 +151,7 @@ const SalasVisaoAdm = () => {
                     >
                       {sala.disponivel ? 'Disponível' : 'Ocupada'}
                     </button>
-                    
+
                     <button 
                       className="edit-btn"
                       onClick={() => navigate(`/editar-sala/${sala.id}`)}
@@ -170,8 +168,10 @@ const SalasVisaoAdm = () => {
             </div>
           )}
         </div>
-        
 
+        
+        
+        
       </main>
     </div>
   );
