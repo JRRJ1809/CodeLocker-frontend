@@ -10,25 +10,43 @@ import Header from '../../components/Header/Header.jsx';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [login, setLogin] = useState('');
+  const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
   const handleLogin = async () => {
+    if (!nome || !senha) {
+      setErro('Preencha todos os campos.');
+      return;
+    }
+
     try {
-      const response = await fetch(`http://localhost:4000/adm?adm1=${login}&senha=${senha}`);
+      const response = await fetch('http://10.90.146.23:7010/api/Usuarios/Login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: nome,
+          senha: senha,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Usuário ou senha inválidos');
+      }
+
       const data = await response.json();
 
-      if (data.length > 0) {
-        // Login correto
+      if (data) {
         alert('Login bem-sucedido!');
-        navigate('/userinicial'); // redireciona para a página desejada
+        // Se desejar armazenar o token ou dados do usuário:
+        // localStorage.setItem('usuario', JSON.stringify(data));
+        navigate('/userinicial');
       } else {
         setErro('Usuário ou senha inválidos');
       }
     } catch (err) {
       console.error('Erro ao conectar com o servidor:', err);
-      setErro('Erro de conexão com o servidor');
+      setErro('Erro ao realizar login. Verifique suas credenciais ou tente mais tarde.');
     }
   };
 
@@ -43,14 +61,14 @@ const Login = () => {
           <div className="form-group">
             <label>
               <img src={userIcon} alt="Ícone Usuário" className="icon" />
-              Login
+              Nome
             </label>
             <input
               type="text"
-              placeholder="Digite seu usuário"
+              placeholder="Digite seu nome"
               autoComplete="off"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
             />
           </div>
 

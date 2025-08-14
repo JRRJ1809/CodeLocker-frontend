@@ -23,9 +23,9 @@ const CadastroAdm = () => {
   const [erro, setErro] = useState('');
   const [sucesso, setSucesso] = useState('');
   const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ 
-    key: 'nome', 
-    direction: 'ascending' 
+  const [sortConfig, setSortConfig] = useState({
+    key: 'nome',
+    direction: 'ascending'
   });
 
   // Busca tipos de usuário (original)
@@ -53,19 +53,19 @@ const CadastroAdm = () => {
     const fetchUsuarios = async () => {
       try {
         const data = [
-          { 
-            id: 1, 
-            nome: 'Admin Master', 
-            email: 'master@senai.com', 
-            telefone: '(11) 9999-9999', 
-            tipo: 1 
+          {
+            id: 1,
+            nome: 'Admin Master',
+            email: 'master@senai.com',
+            telefone: '(11) 9999-9999',
+            tipo: 1
           },
-          { 
-            id: 2, 
-            nome: 'Professor João', 
-            email: 'joao@senai.com', 
-            telefone: '(11) 8888-8888', 
-            tipo: 2 
+          {
+            id: 2,
+            nome: 'Professor João',
+            email: 'joao@senai.com',
+            telefone: '(11) 8888-8888',
+            tipo: 2
           }
         ];
         setUsuarios(data);
@@ -107,13 +107,13 @@ const CadastroAdm = () => {
     try {
       setLoading(prev => ({ ...prev, cadastro: true }));
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+     
       const novoUsuario = {
         id: usuarios.length + 1,
         ...formData,
         tipo: parseInt(formData.tipo)
       };
-      
+     
       setUsuarios(prev => [...prev, novoUsuario]);
       setFormData({
         nome: '',
@@ -180,12 +180,12 @@ const CadastroAdm = () => {
       {modalAberto && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button 
+            <button
               onClick={() => {
                 setModalAberto(false);
                 setErro('');
                 setSucesso('');
-              }} 
+              }}
               className="close-modal-btn"
             >
               X
@@ -262,8 +262,8 @@ const CadastroAdm = () => {
                 </select>
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="submit-btn"
                 disabled={loading.cadastro}
               >
@@ -285,10 +285,10 @@ const CadastroAdm = () => {
       {/* Conteúdo Principal (original) */}
       <main className="main-content">
         <h1 className="page-title">Gerenciamento de Usuários</h1>
-        
+       
         {/* Botão para abrir o modal (NOVO) */}
-        <button 
-          onClick={() => setModalAberto(true)} 
+        <button
+          onClick={() => setModalAberto(true)}
           className="open-modal-btn"
         >
           + Adicionar Usuário
@@ -297,7 +297,7 @@ const CadastroAdm = () => {
         {/* Lista de Usuários (original) */}
         <section className="users-section">
           <h2>Usuários Cadastrados</h2>
-          
+         
           {loading.lista ? (
             <div className="loading-spinner"></div>
           ) : usuarios.length === 0 ? (
@@ -336,7 +336,7 @@ const CadastroAdm = () => {
                         <td>{usuario.telefone || '-'}</td>
                         <td>{tipoUsuario}</td>
                         <td>
-                          <button 
+                          <button
                             className="delete-btn"
                             onClick={() => setUsuarioParaExcluir(usuario)}
                             title="Excluir usuário"
@@ -361,13 +361,13 @@ const CadastroAdm = () => {
             <h3>Confirmar Exclusão</h3>
             <p>Tem certeza que deseja excluir o usuário {usuarioParaExcluir.nome}?</p>
             <div className="modal-buttons">
-              <button 
+              <button
                 className="confirm-btn"
                 onClick={() => handleDelete(usuarioParaExcluir.id)}
               >
                 Confirmar
               </button>
-              <button 
+              <button
                 className="cancel-btn"
                 onClick={() => setUsuarioParaExcluir(null)}
               >
