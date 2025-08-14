@@ -5,7 +5,7 @@ import './CadastroAdm.css';
 
 const CadastroAdm = () => {
   const navigate = useNavigate();
-  const [modalAberto, setModalAberto] = useState(false); // Novo estado para o modal
+  const [modalAberto, setModalAberto] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -28,7 +28,7 @@ const CadastroAdm = () => {
     direction: 'ascending'
   });
 
-  // Busca tipos de usuário (original)
+  // Busca tipos de usuário
   useEffect(() => {
     const fetchTiposUsuario = async () => {
       try {
@@ -48,37 +48,35 @@ const CadastroAdm = () => {
     fetchTiposUsuario();
   }, []);
 
-  // Busca usuários cadastrados (original)
+  // Busca usuários cadastrados via API
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const data = [
-          {
-            id: 1,
-            nome: 'Admin Master',
-            email: 'master@senai.com',
-            telefone: '(11) 9999-9999',
-            tipo: 1
-          },
-          {
-            id: 2,
-            nome: 'Professor João',
-            email: 'joao@senai.com',
-            telefone: '(11) 8888-8888',
-            tipo: 2
-          }
-        ];
-        setUsuarios(data);
+        const response = await fetch('http://10.90.146.23:7010/api/Usuarios/ListarUsuarios');
+
+        if (!response.ok) {
+          throw new Error('Erro ao buscar usuários');
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setUsuarios(data);
+        } else {
+          setErro('Resposta inesperada da API');
+        }
+
         setLoading(prev => ({ ...prev, lista: false }));
       } catch (error) {
+        console.error('Erro ao carregar lista de usuários:', error);
         setErro('Erro ao carregar lista de usuários');
         setLoading(prev => ({ ...prev, lista: false }));
       }
     };
+
     fetchUsuarios();
   }, []);
 
-  // Funções originais (totalmente preservadas)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -107,13 +105,13 @@ const CadastroAdm = () => {
     try {
       setLoading(prev => ({ ...prev, cadastro: true }));
       await new Promise(resolve => setTimeout(resolve, 1000));
-     
+
       const novoUsuario = {
         id: usuarios.length + 1,
         ...formData,
         tipo: parseInt(formData.tipo)
       };
-     
+
       setUsuarios(prev => [...prev, novoUsuario]);
       setFormData({
         nome: '',
@@ -123,7 +121,7 @@ const CadastroAdm = () => {
         tipo: tiposUsuario[0]?.id.toString() || ''
       });
       setSucesso('Usuário cadastrado com sucesso!');
-      setModalAberto(false); // Fecha o modal após cadastro
+      setModalAberto(false);
     } catch (error) {
       setErro('Erro ao cadastrar usuário. Tente novamente.');
     } finally {
@@ -161,7 +159,6 @@ const CadastroAdm = () => {
 
   return (
     <div className="cadastro-adm-container">
-      {/* Cabeçalho Fixo (original) */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
@@ -176,7 +173,6 @@ const CadastroAdm = () => {
         </nav>
       </header>
 
-      {/* Modal de Cadastro (NOVO - mas com o formulário original dentro) */}
       {modalAberto && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -282,11 +278,9 @@ const CadastroAdm = () => {
         </div>
       )}
 
-      {/* Conteúdo Principal (original) */}
       <main className="main-content">
         <h1 className="page-title">Gerenciamento de Usuários</h1>
-       
-        {/* Botão para abrir o modal (NOVO) */}
+
         <button
           onClick={() => setModalAberto(true)}
           className="open-modal-btn"
@@ -294,10 +288,9 @@ const CadastroAdm = () => {
           + Adicionar Usuário
         </button>
 
-        {/* Lista de Usuários (original) */}
         <section className="users-section">
           <h2>Usuários Cadastrados</h2>
-         
+
           {loading.lista ? (
             <div className="loading-spinner"></div>
           ) : usuarios.length === 0 ? (
@@ -354,7 +347,6 @@ const CadastroAdm = () => {
         </section>
       </main>
 
-      {/* Modal de Confirmação de Exclusão (original) */}
       {usuarioParaExcluir && (
         <div className="confirmation-modal-overlay">
           <div className="confirmation-modal">
