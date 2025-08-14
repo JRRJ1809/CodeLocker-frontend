@@ -10,6 +10,8 @@ const SalasVisaoAdm = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState(null);
+  const [editingSala, setEditingSala] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchSalas = async () => {
@@ -38,10 +40,8 @@ const SalasVisaoAdm = () => {
     fetchSalas();
   }, []);
 
-  // Função para alternar status da sala (apenas simulação local)
   const toggleStatus = async (salaId) => {
     try {
-      // Aqui você pode colocar a chamada real para alterar o status na API
       setSalas(salas.map(sala =>
         sala.id === salaId ? { ...sala, disponivel: !sala.disponivel } : sala
       ));
@@ -50,7 +50,28 @@ const SalasVisaoAdm = () => {
     }
   };
 
-  // Filtragem e busca
+  const handleEditClick = (sala) => {
+    setEditingSala(sala);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingSala(null);
+  };
+
+  const handleSave = async () => {
+    try {
+      // Atualização local (substitua pela chamada real à API)
+      setSalas(salas.map(sala => 
+        sala.id === editingSala.id ? { ...sala, nome: editingSala.nome } : sala
+      ));
+      handleCloseModal();
+    } catch (error) {
+      setError("Erro ao atualizar nome da sala");
+    }
+  };
+
   const filteredSalas = salas.filter(sala => {
     const matchesSearch = sala.nome.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
@@ -87,7 +108,6 @@ const SalasVisaoAdm = () => {
 
   return (
     <div className="app-container">
-      {/* Barra Vermelha Superior */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
@@ -101,7 +121,6 @@ const SalasVisaoAdm = () => {
         </nav>
       </header>
 
-      {/* Conteúdo Principal */}
       <main className="main-content">
         <div className="header-section">
           <h1>SENAI</h1>
@@ -154,7 +173,7 @@ const SalasVisaoAdm = () => {
 
                     <button 
                       className="edit-btn"
-                      onClick={() => navigate(`/editar-sala/${sala.id}`)}
+                      onClick={() => handleEditClick(sala)}
                     >
                       Editar
                     </button>
@@ -168,11 +187,36 @@ const SalasVisaoAdm = () => {
             </div>
           )}
         </div>
-
-        
-        
-        
       </main>
+
+      {/* Modal de Edição Simplificado */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Editar Nome da Sala</h3>
+              <button className="close-btn" onClick={handleCloseModal}>×</button>
+            </div>
+            
+            <div className="modal-form">
+              <div className="form-row">
+                <label>Novo Nome da Sala</label>
+                <input 
+                  type="text" 
+                  value={editingSala?.nome || ''}
+                  onChange={(e) => setEditingSala({...editingSala, nome: e.target.value})}
+                  autoFocus
+                />
+              </div>
+              
+              <div className="modal-actions">
+                <button className="cancel-btn" onClick={handleCloseModal}>Cancelar</button>
+                <button className="save-btn" onClick={handleSave}>Salvar Nome</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
