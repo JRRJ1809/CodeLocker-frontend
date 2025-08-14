@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { resolvePath, useNavigate } from 'react-router-dom';
 import senaiLogo from '../../assets/senai-logo.png';
 import './CadastroAdm.css';
 
@@ -32,21 +32,31 @@ const CadastroAdm = () => {
   useEffect(() => {
     const fetchTiposUsuario = async () => {
       try {
-        const data = [
-          { id: 1, nome: 'Administrador' },
-          { id: 2, nome: 'Professor' },
-          { id: 3, nome: 'Funcionário' }
-        ];
+        setLoading(prev => ({ ...prev, tipos: true }));
+  
+        const response = await fetch("http://10.90.146.23:7010/api/Tipos/ListarTipos");
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log(data)
+  
         setTiposUsuario(data);
         setFormData(prev => ({ ...prev, tipo: data[0]?.id.toString() || '' }));
-        setLoading(prev => ({ ...prev, tipos: false }));
+  
       } catch (error) {
+        console.error('Erro ao carregar tipos de usuário: ', error);
         setErro('Erro ao carregar tipos de usuário');
+      } finally {
         setLoading(prev => ({ ...prev, tipos: false }));
       }
     };
+  
     fetchTiposUsuario();
   }, []);
+  
+  
 
   // Busca usuários cadastrados via API
   useEffect(() => {
@@ -252,7 +262,7 @@ const CadastroAdm = () => {
                 >
                   {tiposUsuario.map(tipo => (
                     <option key={tipo.id} value={tipo.id}>
-                      {tipo.nome}
+                      {tipo.tipo}
                     </option>
                   ))}
                 </select>
