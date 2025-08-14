@@ -3,36 +3,47 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/senai-logo.png';
 import Header from '../../components/Header/Header.jsx';
 import Footer from '../../components/Footer/Footer.jsx';
-import userIcon from '../../assets/user-icon.png'; // Importação do ícone de usuário
-import passwordIcon from '../../assets/password-icon.png'; // Importação do ícone de senha
+import userIcon from '../../assets/user-icon.png';
+import passwordIcon from '../../assets/password-icon.png';
 import './Adm.css';
 
-const urlAdm = 'http://localhost:4000/adm';
+const API_URL = 'http://10.90.146.23:7010/api/Usuarios/Login';
 
 const Adm = () => {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
-  const [tipo, setTipo] = useState('');
   const [erro, setErro] = useState('');
 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${urlAdm}?adm1=${login}&senha=${senha}`);
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: login,
+          senha: senha,
+        }),
+      });
+
       const data = await response.json();
 
-      if (data.length > 0) {
-        const usuario = data[0];
-        setTipo(usuario.tipo);
-        alert('Login bem-sucedido!');
-        navigate(usuario.tipo === '1' ? '/AdmInicial' : '/');
+      if (response.ok && data.usuario) {
+        const { tipo } = data.usuario;
+
+        alert(data.message); // "Login realizado com sucesso!"
+
+        // Navegar com base no tipo de usuário
+        navigate(tipo === 1 ? '/AdmInicial' : '/');
       } else {
         setErro('Usuário ou senha inválidos');
       }
     } catch (err) {
       console.error('Erro ao conectar com o servidor:', err);
-      setErro('Erro de conexão');
+      setErro('Erro de conexão com o servidor');
     }
   };
 
