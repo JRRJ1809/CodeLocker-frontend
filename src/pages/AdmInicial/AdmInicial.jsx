@@ -12,32 +12,36 @@ const AdmInicial = () => {
     nome: '',
     email: '',
     telefone: '',
-    tipo: '1' // 1 = Administrador (fixo)
+    tipo: '1'
   });
 
-  // Mock de dados (substitua pela sua API real)
+  // 🔹 Buscar dados do admin do localStorage ou API
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        // Simulando chamada à API
-        setTimeout(() => {
-          setAdminData({
-            id: "1",
-            nome: "Admin Master",
-            email: "admin@senai.br",
-            telefone: "(11) 99999-9999",
-            tipo: "1"
-          });
-          setFormData({
-            nome: "Admin Master",
-            email: "admin@senai.br",
-            telefone: "(11) 99999-9999",
-            tipo: "1"
-          });
+        const id = localStorage.getItem('usuarioId');
+        const nome = localStorage.getItem('usuarioNome');
+        const email = localStorage.getItem('usuarioEmail');
+        const telefone = localStorage.getItem('usuarioTelefone');
+        const tipo = localStorage.getItem('usuarioTipo');
+
+        if (!id) {
           setLoading(false);
-        }, 500);
+          return;
+        }
+
+        // Se quiser garantir que os dados estão atualizados, descomente a chamada à API:
+        // const response = await fetch(`http://10.90.146.23:7010/api/Usuarios/BuscarUsuario/${id}`);
+        // if (!response.ok) throw new Error("Erro ao buscar dados do administrador");
+        // const data = await response.json();
+
+        const data = { id, nome, email, telefone, tipo };
+
+        setAdminData(data);
+        setFormData(data);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -52,20 +56,31 @@ const AdmInicial = () => {
 
   const handleSave = async () => {
     try {
-      // Simulando atualização na API
-      setTimeout(() => {
-        setAdminData(formData);
-        setEditMode(false);
-        console.log("Dados atualizados:", formData);
-      }, 500);
+      const response = await fetch(`http://10.90.146.23:7010/api/Usuarios/${adminData.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error("Erro ao atualizar dados");
+
+      setAdminData(formData);
+      setEditMode(false);
+      alert("Perfil atualizado com sucesso!");
+
+      // Atualizar localStorage
+      localStorage.setItem('usuarioNome', formData.nome);
+      localStorage.setItem('usuarioEmail', formData.email);
+      localStorage.setItem('usuarioTelefone', formData.telefone);
+
     } catch (error) {
       console.error("Erro ao atualizar:", error);
+      alert("Erro ao salvar alterações");
     }
   };
 
   return (
     <div className="app-container">
-      {/* Barra Superior (igual ao UserInicial, mas com navegação de admin) */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
@@ -79,91 +94,45 @@ const AdmInicial = () => {
         </nav>
       </header>
 
-      {/* Conteúdo Principal - IDÊNTICO ao UserInicial */}
       <main className="profile-main-wrapper">
         {loading ? (
-          <div className="loading-message">
-            <p>Carregando seus dados...</p>
-          </div>
+          <p>Carregando seus dados...</p>
         ) : adminData ? (
           <div className="profile-card">
             <div className="profile-header">
               <h2>Perfil Administrativo</h2>
               {!editMode ? (
-                <button 
-                  className="edit-button"
-                  onClick={() => setEditMode(true)}
-                >
-                  Editar Perfil
-                </button>
+                <button className="edit-button" onClick={() => setEditMode(true)}>Editar Perfil</button>
               ) : (
                 <div className="action-buttons">
-                  <button className="save-button" onClick={handleSave}>
-                    Salvar
-                  </button>
-                  <button 
-                    className="cancel-button"
-                    onClick={() => {
-                      setFormData(adminData);
-                      setEditMode(false);
-                    }}
-                  >
+                  <button className="save-button" onClick={handleSave}>Salvar</button>
+                  <button className="cancel-button" onClick={() => { setFormData(adminData); setEditMode(false); }}>
                     Cancelar
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Seção Informações Pessoais */}
             <div className="profile-section">
               <h3>Informações Pessoais</h3>
               {editMode ? (
                 <div className="form-group">
                   <label>Nome Completo</label>
-                  <input
-                    type="text"
-                    name="nome"
-                    value={formData.nome}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
+                  <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} className="form-input" />
                   <label>Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-input" />
                   <label>Telefone</label>
-                  <input
-                    type="tel"
-                    name="telefone"
-                    value={formData.telefone}
-                    onChange={handleInputChange}
-                    className="form-input"
-                    placeholder="(00) 00000-0000"
-                  />
+                  <input type="tel" name="telefone" value={formData.telefone} onChange={handleInputChange} className="form-input" />
                 </div>
               ) : (
                 <div className="info-grid">
-                  <div className="info-item">
-                    <span className="info-label">Nome:</span>
-                    <span className="info-value">{adminData.nome}</span>
-                  </div>
-                  <div className="info-item">
-                    <span className="info-label">Email:</span>
-                    <span className="info-value">{adminData.email}</span>
-                  </div>
-                  <div className="info-item">
-                    <span className="info-label">Telefone:</span>
-                    <span className="info-value">{adminData.telefone || 'Não informado'}</span>
-                  </div>
+                  <div className="info-item"><span className="info-label">Nome:</span><span className="info-value">{adminData.nome}</span></div>
+                  <div className="info-item"><span className="info-label">Email:</span><span className="info-value">{adminData.email}</span></div>
+                  <div className="info-item"><span className="info-label">Telefone:</span><span className="info-value">{adminData.telefone || "Não informado"}</span></div>
                 </div>
               )}
             </div>
 
-            {/* Seção Dados Institucionais */}
             <div className="profile-section">
               <h3>Dados Institucionais</h3>
               <div className="info-item">
@@ -173,9 +142,7 @@ const AdmInicial = () => {
             </div>
           </div>
         ) : (
-          <div className="error-message">
-            <p>Não foi possível carregar seus dados.</p>
-          </div>
+          <p>Não foi possível carregar seus dados. Faça login novamente.</p>
         )}
       </main>
     </div>

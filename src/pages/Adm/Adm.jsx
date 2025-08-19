@@ -32,11 +32,18 @@ const Adm = () => {
       const data = await response.json();
 
       if (response.ok && data.usuario) {
-        const { tipo } = data.usuario;
+        const { id, nome, email, telefone, tipo } = data.usuario;
+
+        // Salvar no localStorage para usar no AdmInicial
+        localStorage.setItem('usuarioId', id);
+        localStorage.setItem('usuarioNome', nome);
+        localStorage.setItem('usuarioEmail', email);
+        localStorage.setItem('usuarioTelefone', telefone);
+        localStorage.setItem('usuarioTipo', tipo);
 
         alert(data.message); // "Login realizado com sucesso!"
 
-        // Navegar com base no tipo de usuário
+        // Redireciona para a tela correta
         navigate(tipo === 1 ? '/AdmInicial' : '/');
       } else {
         setErro('Usuário ou senha inválidos');

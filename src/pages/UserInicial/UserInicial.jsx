@@ -6,38 +6,34 @@ import './UserInicial.css';
 const UserInicial = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    adm1: '',
+    nome: '',
     email: '',
     telefone: '',
     tipo: ''
   });
 
-  // ID do usuário logado (substitua pelo valor real da sua autenticação)
-  const loggedUserId = "1";
-
-  // Busca dados do usuário na API
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`http://localhost:4000/adm?id=${loggedUserId}`);
-        const data = await response.json();
-        
-        if (data.length > 0) {
-          setUserData(data[0]);
-          setFormData(data[0]);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Carregar dados do localStorage (salvos no login)
+    const usuarioId = localStorage.getItem('usuarioId');
+    const usuarioNome = localStorage.getItem('usuarioNome');
+    const usuarioEmail = localStorage.getItem('usuarioEmail');
+    const usuarioTelefone = localStorage.getItem('usuarioTelefone');
+    const usuarioTipo = localStorage.getItem('usuarioTipo');
 
-    fetchUserData();
-  }, [loggedUserId]);
+    if (usuarioId && usuarioNome) {
+      const usuario = {
+        id: usuarioId,
+        nome: usuarioNome,
+        email: usuarioEmail,
+        telefone: usuarioTelefone,
+        tipo: usuarioTipo,
+      };
+      setUserData(usuario);
+      setFormData(usuario);
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,23 +42,25 @@ const UserInicial = () => {
 
   const handleSave = async () => {
     try {
-      // ATUALIZAÇÃO NA API (exemplo)
-      const response = await fetch(`http://localhost:4000/adm/${userData.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
+      const response = await fetch(`http://10.90.146.23:7010/api/Usuarios/${userData.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        setUserData(formData);
-        setEditMode(false);
-        alert('Dados atualizados com sucesso!');
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar:", error);
-      alert('Erro ao salvar alterações');
+      if (!response.ok) throw new Error("Erro ao atualizar dados");
+
+      // Atualiza localStorage com os novos dados
+      localStorage.setItem('usuarioNome', formData.nome);
+      localStorage.setItem('usuarioEmail', formData.email);
+      localStorage.setItem('usuarioTelefone', formData.telefone);
+
+      setUserData(formData);
+      setEditMode(false);
+      alert("Dados atualizados com sucesso!");
+    } catch (err) {
+      console.error("Erro ao salvar:", err);
+      alert("Erro ao salvar alterações");
     }
   };
 
@@ -79,7 +77,6 @@ const UserInicial = () => {
 
   return (
     <div className="app-container">
-      {/* Barra Superior */}
       <header className="red-header">
         <div className="logo-container">
           <img src={senaiLogo} alt="Logo SENAI" className="senai-logo" />
@@ -91,91 +88,45 @@ const UserInicial = () => {
         </nav>
       </header>
 
-      {/* Conteúdo Principal com espaçamento */}
       <main className="profile-main-wrapper">
-        {loading ? (
-          <div className="loading-message">
-            <p>Carregando seus dados...</p>
-          </div>
-        ) : userData ? (
+        {userData ? (
           <div className="profile-card">
             <div className="profile-header">
               <h2>Meu Perfil</h2>
               {!editMode ? (
-                <button 
-                  className="edit-button"
-                  onClick={() => setEditMode(true)}
-                >
+                <button className="edit-button" onClick={() => setEditMode(true)}>
                   Editar Perfil
                 </button>
               ) : (
                 <div className="action-buttons">
-                  <button className="save-button" onClick={handleSave}>
-                    Salvar
-                  </button>
-                  <button 
-                    className="cancel-button"
-                    onClick={() => {
-                      setFormData(userData);
-                      setEditMode(false);
-                    }}
-                  >
+                  <button className="save-button" onClick={handleSave}>Salvar</button>
+                  <button className="cancel-button" onClick={() => { setFormData(userData); setEditMode(false); }}>
                     Cancelar
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Seção Informações Pessoais */}
             <div className="profile-section">
               <h3>Informações Pessoais</h3>
               {editMode ? (
                 <div className="form-group">
                   <label>Nome Completo</label>
-                  <input
-                    type="text"
-                    name="adm1"
-                    value={formData.adm1}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
+                  <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} className="form-input" />
                   <label>Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-input" />
                   <label>Telefone</label>
-                  <input
-                    type="tel"
-                    name="telefone"
-                    value={formData.telefone}
-                    onChange={handleInputChange}
-                    className="form-input"
-                    placeholder="(00) 00000-0000"
-                  />
+                  <input type="tel" name="telefone" value={formData.telefone} onChange={handleInputChange} className="form-input" />
                 </div>
               ) : (
-                            <div className="info-grid">
-              <div className="info-item">
-                <span className="info-label">Nome:</span>
-                <span className="info-value">{userData?.adm1 || 'Não informado'}</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Email:</span>
-                <span className="info-value">{userData?.email || 'Não informado'}</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Telefone:</span>
-                <span className="info-value">{userData?.telefone || 'Não informado'}</span>
-              </div>
-            </div>
+                <div className="info-grid">
+                  <div className="info-item"><span className="info-label">Nome:</span><span className="info-value">{userData.nome}</span></div>
+                  <div className="info-item"><span className="info-label">Email:</span><span className="info-value">{userData.email}</span></div>
+                  <div className="info-item"><span className="info-label">Telefone:</span><span className="info-value">{userData.telefone}</span></div>
+                </div>
               )}
             </div>
 
-            {/* Seção Dados Institucionais */}
             <div className="profile-section">
               <h3>Dados Institucionais</h3>
               <div className="info-item">
@@ -185,9 +136,7 @@ const UserInicial = () => {
             </div>
           </div>
         ) : (
-          <div className="error-message">
-            <p>Não foi possível carregar seus dados.</p>
-          </div>
+          <p>Nenhum dado encontrado. Faça login novamente.</p>
         )}
       </main>
     </div>

@@ -35,11 +35,22 @@ const Login = () => {
       }
 
       const data = await response.json();
+      console.log('[Login] Resposta da API:', data);
 
-      if (data) {
-        alert('Login bem-sucedido!');
-        // Se desejar armazenar o token ou dados do usuário:
-        // localStorage.setItem('usuario', JSON.stringify(data));
+      if (data && data.usuario) {
+        const usuario = data.usuario;
+
+        // Salvar usuário no localStorage
+        localStorage.setItem('usuarioId', String(usuario.id));
+        localStorage.setItem('usuarioNome', usuario.nome || '');
+        localStorage.setItem('usuarioEmail', usuario.email || '');
+        localStorage.setItem('usuarioTelefone', usuario.telefone || '');
+        localStorage.setItem('usuarioQrcode', usuario.qrcode || '');
+        localStorage.setItem('usuarioTipo', String(usuario.tipo));
+
+        console.log('[Login] Usuário salvo no localStorage:', usuario);
+
+        alert(data.message || 'Login realizado com sucesso!');
         navigate('/userinicial');
       } else {
         setErro('Usuário ou senha inválidos');
