@@ -9,27 +9,29 @@ const Salas = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+  const [error, setError] = useState(null);
 
-  // Simulando chamada à API - Substitua pelo seu fetch real
+  // CHAMADA REAL DA API (igual você fez no Admin)
   useEffect(() => {
     const fetchSalas = async () => {
       try {
-        // Aqui você fará a chamada real para sua API
-        // const response = await fetch('sua-api/salas');
-        // const data = await response.json();
-        
-        // Dados mockados temporários
-        const data = [
-          { id: 1, nome: 'Sala 101', capacidade: 20, disponivel: true, tipo: 'Sala de Aula' },
-          { id: 2, nome: 'Laboratório de TI', capacidade: 15, disponivel: false, tipo: 'Laboratório' },
-          { id: 3, nome: 'Sala 202', capacidade: 25, disponivel: true, tipo: 'Sala de Aula' },
-          { id: 4, nome: 'Auditório', capacidade: 50, disponivel: true, tipo: 'Auditório' }
-        ];
-        
-        setSalas(data);
-        setLoading(false);
+        const response = await fetch('http://10.90.146.23:7010/api/Salas/LsitarSalas');
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setSalas(data);
+        } else {
+          setError('Resposta inesperada da API');
+        }
       } catch (error) {
         console.error("Erro ao carregar salas:", error);
+        setError("Falha ao carregar salas. Tente recarregar a página.");
+      } finally {
         setLoading(false);
       }
     };
@@ -37,7 +39,7 @@ const Salas = () => {
     fetchSalas();
   }, []);
 
-  // Filtragem e busca
+  // Filtragem e busca (mantida igual)
   const filteredSalas = salas.filter(sala => {
     const matchesSearch = sala.nome.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = 
@@ -87,6 +89,9 @@ const Salas = () => {
       <main className="main-content">
         <div className="header-section">
           <h2>SALAS DISPONÍVEIS</h2>
+          
+          {error && <div className="error-message">{error}</div>}
+          
           <div className="search-filter">
             <input 
               type="text" 
