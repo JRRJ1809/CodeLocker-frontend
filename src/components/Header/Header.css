@@ -1,23 +1,19 @@
 .header {
   background-color: #b3081b;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Centraliza ao invés de space-between */
   align-items: center;
-  padding: 10px 30px;
+  padding: 5px 20px; /* REDUZIDO */
   width: 100%;
+  box-sizing: border-box; /* IMPORTANTE: inclui padding na largura */
 }
-.image-logo{
+
+.image-logo {
   text-align: center;
 }
 
-.logoh{
-  height: 100px;
-  width: 400px;
-}
-
-.header nav a {
-  margin-left: 20px;
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
+.logoh {
+  height: 60px; /* REDUZIDO (era 100px) */
+  width: auto; /* PROPORCIONAL (era 400px fixo) */
+  max-width: 250px; /* LIMITE MÁXIMO */
 }
