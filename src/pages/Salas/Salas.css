@@ -248,4 +248,15 @@
     width: 100%;
     max-width: 100%;
   }
+
+/* Adicione no final do arquivo */
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  text-align: center;
+  max-width: 600px;
+}
 }
