@@ -1,10 +1,21 @@
 .footer {
   text-align: center;
-  padding: 15px;
+  padding: 12px 15px; /* Reduzido */
   background-color: #b3081b;
   color: white;
   width: 100%;
-  margin-top: auto; /* Novo - para alinhamento flexível */
-  position: relative; /* Remove o fixed que causava problemas */
-  /* Remova margin-left: -10px (isso é gambiarra) */
+  margin-top: auto;
+  flex-shrink: 0; /* Impede que o footer encolha */
+  box-sizing: border-box; /* Fundamental! */
+  position: relative;
+  z-index: 10; /* Fica acima do conteúdo */
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 480px) {
+  .footer {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
 }
