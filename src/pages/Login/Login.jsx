@@ -41,12 +41,13 @@ const Login = () => {
         const usuario = data.usuario;
 
         // Salvar usuário no localStorage
-        localStorage.setItem('usuarioId', String(usuario.id));
-        localStorage.setItem('usuarioNome', usuario.nome || '');
-        localStorage.setItem('usuarioEmail', usuario.email || '');
-        localStorage.setItem('usuarioTelefone', usuario.telefone || '');
-        localStorage.setItem('usuarioQrcode', usuario.qrcode || '');
-        localStorage.setItem('usuarioTipo', String(usuario.tipo));
+        localStorage.setItem('usuarioId', data.usuario.id);
+        localStorage.setItem('usuarioNome', data.usuario.nome);
+        localStorage.setItem('usuarioEmail', data.usuario.email);
+        localStorage.setItem('usuarioTelefone', data.usuario.telefone);
+        localStorage.setItem('usuarioTipo', data.usuario.tipo);
+        localStorage.setItem('usuarioQRCode', data.usuario.qrcode); // ✅ salvar QR Code
+
 
         console.log('[Login] Usuário salvo no localStorage:', usuario);
 

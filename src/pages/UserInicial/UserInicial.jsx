@@ -11,7 +11,8 @@ const UserInicial = () => {
     nome: '',
     email: '',
     telefone: '',
-    tipo: ''
+    tipo: '',
+    qrcode: ''
   });
 
   useEffect(() => {
@@ -21,6 +22,7 @@ const UserInicial = () => {
     const usuarioEmail = localStorage.getItem('usuarioEmail');
     const usuarioTelefone = localStorage.getItem('usuarioTelefone');
     const usuarioTipo = localStorage.getItem('usuarioTipo');
+    const usuarioQRCode = localStorage.getItem('usuarioQRCode');
 
     if (usuarioId && usuarioNome) {
       const usuario = {
@@ -29,6 +31,7 @@ const UserInicial = () => {
         email: usuarioEmail,
         telefone: usuarioTelefone,
         tipo: usuarioTipo,
+        qrcode: usuarioQRCode
       };
       setUserData(usuario);
       setFormData(usuario);
@@ -50,7 +53,6 @@ const UserInicial = () => {
 
       if (!response.ok) throw new Error("Erro ao atualizar dados");
 
-      // Atualiza localStorage com os novos dados
       localStorage.setItem('usuarioNome', formData.nome);
       localStorage.setItem('usuarioEmail', formData.email);
       localStorage.setItem('usuarioTelefone', formData.telefone);
@@ -94,15 +96,11 @@ const UserInicial = () => {
             <div className="profile-header">
               <h2>Meu Perfil</h2>
               {!editMode ? (
-                <button className="edit-button" onClick={() => setEditMode(true)}>
-                  Editar Perfil
-                </button>
+                <button className="edit-button" onClick={() => setEditMode(true)}>Editar Perfil</button>
               ) : (
                 <div className="action-buttons">
                   <button className="save-button" onClick={handleSave}>Salvar</button>
-                  <button className="cancel-button" onClick={() => { setFormData(userData); setEditMode(false); }}>
-                    Cancelar
-                  </button>
+                  <button className="cancel-button" onClick={() => { setFormData(userData); setEditMode(false); }}>Cancelar</button>
                 </div>
               )}
             </div>
@@ -117,12 +115,15 @@ const UserInicial = () => {
                   <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-input" />
                   <label>Telefone</label>
                   <input type="tel" name="telefone" value={formData.telefone} onChange={handleInputChange} className="form-input" />
+                  <label>QR Code</label>
+                  <input type="text" value={userData.qrcode || ""} readOnly className="form-input" />
                 </div>
               ) : (
                 <div className="info-grid">
                   <div className="info-item"><span className="info-label">Nome:</span><span className="info-value">{userData.nome}</span></div>
                   <div className="info-item"><span className="info-label">Email:</span><span className="info-value">{userData.email}</span></div>
-                  <div className="info-item"><span className="info-label">Telefone:</span><span className="info-value">{userData.telefone}</span></div>
+                  <div className="info-item"><span className="info-label">Telefone:</span><span className="info-value">{userData.telefone || "Não informado"}</span></div>
+                  <div className="info-item"><span className="info-label">Código de Acesso:</span><span className="info-value">{userData.qrcode || "Não disponível"}</span></div>
                 </div>
               )}
             </div>

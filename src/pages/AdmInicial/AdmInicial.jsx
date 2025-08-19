@@ -12,38 +12,29 @@ const AdmInicial = () => {
     nome: '',
     email: '',
     telefone: '',
-    tipo: '1'
+    tipo: '1',
+    qrcode: ''
   });
 
-  // 🔹 Buscar dados do admin do localStorage ou API
+  // 🔹 Buscar dados do admin do localStorage
   useEffect(() => {
-    const fetchAdminData = async () => {
-      try {
-        const id = localStorage.getItem('usuarioId');
-        const nome = localStorage.getItem('usuarioNome');
-        const email = localStorage.getItem('usuarioEmail');
-        const telefone = localStorage.getItem('usuarioTelefone');
-        const tipo = localStorage.getItem('usuarioTipo');
+    const fetchAdminData = () => {
+      const id = localStorage.getItem('usuarioId');
+      const nome = localStorage.getItem('usuarioNome');
+      const email = localStorage.getItem('usuarioEmail');
+      const telefone = localStorage.getItem('usuarioTelefone');
+      const tipo = localStorage.getItem('usuarioTipo');
+      const qrcode = localStorage.getItem('usuarioQRCode');
 
-        if (!id) {
-          setLoading(false);
-          return;
-        }
-
-        // Se quiser garantir que os dados estão atualizados, descomente a chamada à API:
-        // const response = await fetch(`http://10.90.146.23:7010/api/Usuarios/BuscarUsuario/${id}`);
-        // if (!response.ok) throw new Error("Erro ao buscar dados do administrador");
-        // const data = await response.json();
-
-        const data = { id, nome, email, telefone, tipo };
-
-        setAdminData(data);
-        setFormData(data);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      } finally {
+      if (!id) {
         setLoading(false);
+        return;
       }
+
+      const data = { id, nome, email, telefone, tipo, qrcode };
+      setAdminData(data);
+      setFormData(data);
+      setLoading(false);
     };
 
     fetchAdminData();
@@ -123,12 +114,15 @@ const AdmInicial = () => {
                   <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-input" />
                   <label>Telefone</label>
                   <input type="tel" name="telefone" value={formData.telefone} onChange={handleInputChange} className="form-input" />
+                  <label>QR Code</label>
+                  <input type="text" value={adminData.qrcode || ""} readOnly className="form-input" />
                 </div>
               ) : (
                 <div className="info-grid">
                   <div className="info-item"><span className="info-label">Nome:</span><span className="info-value">{adminData.nome}</span></div>
                   <div className="info-item"><span className="info-label">Email:</span><span className="info-value">{adminData.email}</span></div>
                   <div className="info-item"><span className="info-label">Telefone:</span><span className="info-value">{adminData.telefone || "Não informado"}</span></div>
+                  <div className="info-item"><span className="info-label">Código de Acesso:</span><span className="info-value">{adminData.qrcode || "Não disponível"}</span></div>
                 </div>
               )}
             </div>

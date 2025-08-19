@@ -35,11 +35,13 @@ const Adm = () => {
         const { id, nome, email, telefone, tipo } = data.usuario;
 
         // Salvar no localStorage para usar no AdmInicial
-        localStorage.setItem('usuarioId', id);
-        localStorage.setItem('usuarioNome', nome);
-        localStorage.setItem('usuarioEmail', email);
-        localStorage.setItem('usuarioTelefone', telefone);
-        localStorage.setItem('usuarioTipo', tipo);
+        localStorage.setItem('usuarioId', data.usuario.id);
+        localStorage.setItem('usuarioNome', data.usuario.nome);
+        localStorage.setItem('usuarioEmail', data.usuario.email);
+        localStorage.setItem('usuarioTelefone', data.usuario.telefone);
+        localStorage.setItem('usuarioTipo', data.usuario.tipo);
+        localStorage.setItem('usuarioQRCode', data.usuario.qrcode); // ✅ salvar QR Code
+
 
         alert(data.message); // "Login realizado com sucesso!"
 
