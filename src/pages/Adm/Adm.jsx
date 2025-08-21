@@ -42,8 +42,7 @@ const Adm = () => {
         localStorage.setItem('usuarioTipo', data.usuario.tipo);
         localStorage.setItem('usuarioQRCode', data.usuario.qrcode); // ✅ salvar QR Code
 
-
-        alert(data.message); // "Login realizado com sucesso!"
+        // Removido o alert aqui
 
         // Redireciona para a tela correta
         navigate(tipo === 1 ? '/AdmInicial' : '/');

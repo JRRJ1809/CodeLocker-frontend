@@ -48,10 +48,9 @@ const Login = () => {
         localStorage.setItem('usuarioTipo', data.usuario.tipo);
         localStorage.setItem('usuarioQRCode', data.usuario.qrcode); // ✅ salvar QR Code
 
-
         console.log('[Login] Usuário salvo no localStorage:', usuario);
 
-        alert(data.message || 'Login realizado com sucesso!');
+        // Removido o alert aqui
         navigate('/userinicial');
       } else {
         setErro('Usuário ou senha inválidos');
