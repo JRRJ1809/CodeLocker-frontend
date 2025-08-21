@@ -95,14 +95,12 @@ const UserInicial = () => {
           <div className="profile-card">
             <div className="profile-header">
               <h2>Meu Perfil</h2>
-              {!editMode ? (
-                <button className="edit-button" onClick={() => setEditMode(true)}>Editar Perfil</button>
-              ) : (
+              {editMode ? (
                 <div className="action-buttons">
                   <button className="save-button" onClick={handleSave}>Salvar</button>
                   <button className="cancel-button" onClick={() => { setFormData(userData); setEditMode(false); }}>Cancelar</button>
                 </div>
-              )}
+              ) : null}
             </div>
 
             <div className="profile-section">

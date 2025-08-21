@@ -16,7 +16,6 @@ const Salas = () => {
     const fetchSalas = async () => {
       try {
         const response = await fetch('http://10.90.146.23:7010/api/Salas/LsitarSalas');
-
         if (!response.ok) {
           throw new Error(`Erro HTTP: ${response.status}`);
         }
@@ -24,7 +23,13 @@ const Salas = () => {
         const data = await response.json();
 
         if (Array.isArray(data)) {
-          setSalas(data);
+          // Adiciona o campo "disponivel" com base no "status_salas"
+          const salasComStatus = data.map(sala => ({
+            ...sala,
+            disponivel: sala.status_salas === 1 // 1 = Disponível, 2 = Indisponível
+          }));
+
+          setSalas(salasComStatus);
         } else {
           setError('Resposta inesperada da API');
         }
@@ -37,7 +42,7 @@ const Salas = () => {
     };
 
     fetchSalas();
-  }, []);
+  }, []); // Chama a função ao carregar o componente
 
   // Filtragem e busca (mantida igual)
   const filteredSalas = salas.filter(sala => {
@@ -102,8 +107,6 @@ const Salas = () => {
             <select value={filter} onChange={(e) => setFilter(e.target.value)}>
               <option value="all">Todas as salas</option>
               <option value="available">Disponíveis</option>
-              <option value="classroom">Salas de aula</option>
-              <option value="lab">Laboratórios</option>
             </select>
           </div>
         </div>
@@ -127,9 +130,6 @@ const Salas = () => {
                   <span className="status-dot"></span>
                   <span>{sala.disponivel ? 'Disponível' : 'Ocupada'}</span>
                 </div>
-                <button className="reserva-btn">
-                  {sala.disponivel ? 'Reservar' : 'Detalhes'}
-                </button>
               </div>
             ))
           ) : (

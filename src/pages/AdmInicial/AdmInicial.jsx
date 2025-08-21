@@ -80,6 +80,7 @@ const AdmInicial = () => {
           <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
           <button onClick={() => navigate('/cadastroadm')}>CRIAR USUÁRIO</button>
           <button onClick={() => navigate('/salasvisaoadm')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/adminicial')}>PERFIL</button>
           <button onClick={() => navigate('/')}>TELA INICIAL</button>
         </nav>
       </header>
@@ -91,16 +92,14 @@ const AdmInicial = () => {
           <div className="profile-card">
             <div className="profile-header">
               <h2>Perfil Administrativo</h2>
-              {!editMode ? (
-                <button className="edit-button" onClick={() => setEditMode(true)}>Editar Perfil</button>
-              ) : (
+              {editMode ? (
                 <div className="action-buttons">
                   <button className="save-button" onClick={handleSave}>Salvar</button>
-                  <button className="cancel-button" onClick={() => { setFormData(adminData); setEditMode(false); }}>
+                  <button className="cancel-button" onClick={() => { setFormData(adminData); setEditMode(false); }} >
                     Cancelar
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
 
             <div className="profile-section">

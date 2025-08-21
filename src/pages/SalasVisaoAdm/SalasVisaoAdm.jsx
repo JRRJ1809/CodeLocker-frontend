@@ -95,6 +95,7 @@ const SalasVisaoAdm = () => {
           <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
           <button onClick={() => navigate('/cadastroadm')}>CRIAR USUÁRIO</button>
           <button className="active" onClick={() => navigate('/salasvisaoadm')}>SALAS DISPONÍVEIS</button>
+          <button onClick={() => navigate('/adminicial')}>PERFIL</button>
           <button onClick={() => navigate('/')}>TELA INICIAL</button>
         </nav>
       </header>
