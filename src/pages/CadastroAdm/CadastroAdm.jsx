@@ -219,7 +219,6 @@ const CadastroAdm = () => {
         </div>
         <nav>
           <button onClick={() => navigate('/adm')}>CADASTRO ADM</button>
-          <button onClick={() => navigate('/registros')}>REGISTROS</button>
           <button className="active" onClick={() => navigate('/cadastroadm')}>CRIAR USUÁRIO</button>
           <button onClick={() => navigate('/salasvisaoadm')}>SALAS DISPONÍVEIS</button>
           <button onClick={() => navigate('/')}>TELA INICIAL</button>
