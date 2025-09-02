@@ -129,10 +129,7 @@ const SalasVisaoAdm = () => {
                 <span className="sala-tipo">{sala.tipo}</span>
               </div>
               <div className="sala-content">
-                <div className="sala-details">
-                  <span className="capacity-icon">👥</span>
-                  <span>{sala.capacidade} pessoas</span>
-                </div>
+                
                 <div className="sala-actions">
                   <button 
                     className={`status-btn ${sala.disponivel ? 'disponivel' : 'indisponivel'}`}

@@ -121,10 +121,7 @@ const Salas = () => {
                 <div className="sala-tipo">{sala.tipo}</div>
                 <div className="sala-content">
                   <h3>{sala.nome}</h3>
-                  <div className="sala-details">
-                    <span className="capacity-icon">👥</span>
-                    <span>{sala.capacidade} pessoas</span>
-                  </div>
+                
                 </div>
                 <div className="sala-status">
                   <span className="status-dot"></span>

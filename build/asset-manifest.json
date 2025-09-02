@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.0964aabc.css",
+    "main.js": "/static/js/main.d251e5cf.js",
+    "static/media/senai-logo.png": "/static/media/senai-logo.a3efee5d2669e0fd7b49.png",
+    "index.html": "/index.html",
+    "main.0964aabc.css.map": "/static/css/main.0964aabc.css.map",
+    "main.d251e5cf.js.map": "/static/js/main.d251e5cf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0964aabc.css",
+    "static/js/main.d251e5cf.js"
+  ]
+}
