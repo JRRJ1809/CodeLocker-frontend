@@ -15,7 +15,7 @@ const SalasVisaoAdm = () => {
   useEffect(() => {
     const fetchSalas = async () => {
       try {
-        const response = await fetch('http://10.90.146.23:7010/api/Salas/LsitarSalas');
+        const response = await fetch('http://10.90.132.4:7010/api/Salas/LsitarSalas');
         if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -44,7 +44,7 @@ const SalasVisaoAdm = () => {
 
     try {
       const response = await fetch(
-        `http://10.90.146.23:7010/api/Salas/EditarStatus/${sala.id}/status`,
+        `http://10.90.132.4:7010/api/Salas/EditarStatus/${sala.id}/status`,
         {
           method: 'PUT',
           headers: {

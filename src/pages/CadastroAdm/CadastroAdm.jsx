@@ -31,7 +31,7 @@ const CadastroAdm = () => {
   const fetchUsuarios = async () => {
     try {
       setLoading(prev => ({ ...prev, lista: true }));
-      const response = await fetch('http://10.90.146.23:7010/api/Usuarios/ListarUsuarios');
+      const response = await fetch('http://10.90.132.4:7010/api/Usuarios/ListarUsuarios');
       if (!response.ok) {
         throw new Error('Erro ao buscar usuários');
       }
@@ -54,7 +54,7 @@ const CadastroAdm = () => {
     const fetchTiposUsuario = async () => {
       try {
         setLoading(prev => ({ ...prev, tipos: true }));
-        const response = await fetch("http://10.90.146.23:7010/api/Tipos/ListarTipos");
+        const response = await fetch("http://10.90.132.4:7010/api/Tipos/ListarTipos");
         if (!response.ok) {
           throw new Error(`Erro HTTP: ${response.status}`);
         }
@@ -112,7 +112,7 @@ const CadastroAdm = () => {
         tipo: parseInt(formData.tipo)
       };
 
-      const response = await fetch('http://10.90.146.23:7010/api/Usuarios/CadastrarUsuario', {
+      const response = await fetch('http://10.90.132.4:7010/api/Usuarios/CadastrarUsuario', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -148,7 +148,7 @@ const CadastroAdm = () => {
 
     try {
       // 1º - Tenta com query string
-      let response = await fetch(`http://10.90.146.23:7010/api/Usuarios/DeletarUsuario?id=${id}`, {
+      let response = await fetch(`http://10.90.132.4:7010/api/Usuarios/DeletarUsuario?id=${id}`, {
         method: 'DELETE',
       });
       console.log("Query string delete:", response.status);
@@ -160,7 +160,7 @@ const CadastroAdm = () => {
       }
 
       // 2º - Tenta com segment na URL
-      response = await fetch(`http://10.90.146.23:7010/api/Usuarios/DeletarUsuario/${id}`, {
+      response = await fetch(`http://10.90.132.4:7010/api/Usuarios/DeletarUsuario/${id}`, {
         method: 'DELETE',
       });
       console.log("Segment delete:", response.status);
@@ -172,7 +172,7 @@ const CadastroAdm = () => {
       }
 
       // 3º - Tenta enviando no body
-      response = await fetch(`http://10.90.146.23:7010/api/Usuarios/DeletarUsuario`, {
+      response = await fetch(`http://10.90.132.4:7010/api/Usuarios/DeletarUsuario`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })

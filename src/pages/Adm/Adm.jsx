@@ -7,7 +7,7 @@ import userIcon from '../../assets/user-icon.png';
 import passwordIcon from '../../assets/password-icon.png';
 import './Adm.css';
 
-const API_URL = 'http://10.90.146.23:7010/api/Usuarios/Login';
+const API_URL = 'http://10.90.132.4:7010/api/Usuarios/Login';
 
 const Adm = () => {
   const [login, setLogin] = useState('');
