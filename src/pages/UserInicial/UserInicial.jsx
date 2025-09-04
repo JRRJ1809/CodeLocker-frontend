@@ -45,7 +45,7 @@ const UserInicial = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://10.90.132.4:7010/api/Usuarios/${userData.id}`, {
+      const response = await fetch(`http://10.90.154.27:7010/api/Usuarios/${userData.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

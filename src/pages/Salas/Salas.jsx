@@ -15,7 +15,7 @@ const Salas = () => {
   useEffect(() => {
     const fetchSalas = async () => {
       try {
-        const response = await fetch('http://10.90.132.4:7010/api/Salas/LsitarSalas');
+        const response = await fetch('http://10.90.154.27:7010/api/Salas/LsitarSalas');
         if (!response.ok) {
           throw new Error(`Erro HTTP: ${response.status}`);
         }
